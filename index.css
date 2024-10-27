@@ -21,9 +21,36 @@ body {
 
 .title {
     font-size: 5em;
-    color: #a68417;
-    margin-bottom: 20px;
-    font-family: 'Edu Australia VIC WA NT Hand Guides';
+    color: #3a3a3a; 
+    letter-spacing: 0.15em;
+    text-align: center;
+    position: relative;
+    padding: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+.title:before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 2px dashed #7A6230;
+    border-radius: 15px;
+    opacity: 0.7;
+}
+
+
+
+#difficulty-title{
+    
+    font-family: 'Poppins', sans-serif; 
+    color: #342f2f;
+    border: 2px inset rgb(209, 176, 161);
+    border-radius: 100px;
+    border-style: inset;
 }
 
 .flex {
@@ -34,29 +61,25 @@ body {
 
 .input-box {
     width: 90%;
-    padding: 15px;
+    padding: 10px;
     font-size: 1.2em;
     border: 2px solid #dfd8b2;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     box-sizing: border-box;
-    outline: none;
-    text-align: left;
+    text-align: center;
+    font-weight: bold;
     color: #b19f66;
     background-color: #f5f7e6;
 }
 
 .difficulty {
-    border: px solid rgb(209, 176, 161);
+    border: 2px outset rgb(209, 176, 161);
     padding: 10px;
     border-radius: 30px;
 }
 
-.difficulty h2 {
-    color: #b7b07d;
-    margin-bottom: 15px;
-    font-family: 'Arial Black', sans-serif;
-}
+
 
 .buttons {
     display: flex;
@@ -125,11 +148,28 @@ body {
     display: flex;
     height: 100%;
     flex-direction: column;
-    align-items: center;
     margin-left: 10px;
     margin-top: auto;
     margin-bottom: auto;
 }
+
+
+#showLeaderboard {
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 4px;
+    font-size: 14px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+#showLeaderboard:hover {
+    background-color: #45a049;
+    color: #fff; 
+}
+
 
 #rules {
     background-color: rgb(162, 231, 162);
@@ -144,269 +184,152 @@ body {
 
 
 .instructions {
-    background-color: rgba(255, 255, 255, 0.7); /* Slightly more opaque for readability */
+    background-color: rgba(255, 255, 255, 0.7); 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 20px; /* Adds space above the instructions box */
-    text-align: left; /* Left-aligns the text */
-    color: #333; /* Darker text for better readability */
-    max-width: 700px; /* Max width to prevent stretching on large screens */
-    width: 100%; /* Responsive width */
+    margin-top: 20px; 
+    text-align: left;
+    color: #333; 
+    max-width: 700px; 
+    width: 100%; 
 }
 
 .instructions h2 {
-    font-size: 2em; /* Adjust font size for the title */
-    color: #b19f66; /* Match color with existing titles */
+    font-size: 2em; 
+    color: #b19f66; 
     margin-bottom: 10px;
 }
 
 .instructions p {
-    font-size: 1em; /* Normal font size for the paragraph */
-    line-height: 1.5; /* Improves readability */
-    margin: 0; /* Reset margin */
+    font-size: 1em; 
+    line-height: 1.5; 
+    margin: 0; 
 }
 
 .instructions ul {
-    padding-left: 20px; /* Indent unordered list */
+    padding-left: 20px; 
 }
 
 .instructions ul li {
-    font-size: 1em; /* Default size for list items */
+    font-size: 1em; 
 }
 
 #instructions {
     display: flex;
-    flex-direction: column; /* Stack instructions vertically */
-    align-items: flex-start; /* Align items to start */
+    flex-direction: column; 
+    align-items: flex-start; 
 }
 
- 
-
-.back-btn {
-    display: inline-flex; /* Make it inline-flex for better alignment with icon */
-    align-items: center; /* Center the icon and text vertically */
-    justify-content: center; /* Center the content horizontally */
-    padding: 10px 20px; /* Add padding for spacing */
-    background-color: #eac768; /* Button background color */
-    color: white; /* Text color */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded corners */
-    font-weight: bold; /* Bold text */
-    border: none; /* No border */
-    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effect */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow effect */
+.back-btn, .backgame-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #eac768;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
     font-weight: bold;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 0.89em;
 }
 
 .back-btn:hover {
-    background-color: #d09d11; /* Darker background color on hover */
-    transform: translateY(-2px); /* Lift effect on hover */
+    background-color: #d09d11;
+    transform: translateY(-2px);
 }
-
-@media (max-width: 768px) {
-    .title {
-        font-size: 3em;
-    }
-
-    .input-box {
-        width: 95%;
-        font-size: 1em;
-        padding: 10px;
-    }
-
-    .flex {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .difficulty {
-        margin: 10px 0;
-        width: 100%;
-        max-width: 300px;
-    }
-
-    .btn {
-        width: 80%;
-        font-size: 0.9em;
-        padding: 10px;
-    }
-
-    .buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .controls {
-        margin-top: 20px;
-    }
-
-    .instructions {
-        padding: 15px; /* Adjust padding for smaller screens */
-    }
-
-    .instructions h2 {
-        font-size: 1.5em; /* Reduce font size for the heading */
-    }
-
-    .instructions p {
-        font-size: 0.9em; /* Reduce font size for paragraphs */
-    }
-
-    .instructions ul li {
-        font-size: 0.9em; /* Reduce font size for list items */
-    }
-}
-
-@media (max-width: 480px) {
-    .title {
-        font-size: 2em;
-    }
-
-    .input-box {
-        font-size: 0.9em;
-    }
-
-    .btn {
-        font-size: 0.8em;
-    }
-    .back-btn {
-        font-size: 0.8em;
-    }
-
-    .rules-start {
-        width: 90%;
-    }
-
-    .instructions {
-        padding: 10px; /* Further reduce padding */
-    }
-
-    .instructions h2 {
-        font-size: 1.2em; /* Reduce font size for the heading */
-    }
-
-    .instructions p {
-        font-size: 0.8em; /* Reduce font size for paragraphs */
-    }
-
-    .instructions ul li {
-        font-size: 0.8em; /* Reduce font size for list items */
-    }
-}
-
 
 .game-section {
-    width: 1000px; /* Match the width of container-menu */
+    width: 1000px;
     margin: 20px auto;
     background-color: #faf3e0;
     border: 2px solid #c4a77d;
     padding: 50px;
-    border-radius: 10px; /* Match the rounded corners */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Vertically center elements */
-    height: 90vh; /* Ensure that the section takes the full height of the viewport */
+    align-items: center;
+    height: 90vh;
     box-sizing: border-box;
 }
 
 .game-sidebar, .game-board, .palette-section {
-    margin: 0; /* Reset any unwanted margin */
+    margin: 0;
 }
 
 #button {
-    text-align: center;  /* Center the button in its container */
-    margin-top: 20px;    /* Add some space from the top */
+    text-align: center;
+    margin-top: 20px;
 }
 
 #resetButton button {
-    background-color: #4CAF50;  /* Green background */
-    border: none;               /* Remove default border */
-    color: white;               /* White text color */
-    padding: 10px 20px;         /* Padding around the button */
-    text-align: center;         /* Center text alignment */
-    text-decoration: none;      /* Remove underline */
-    display: inline-block;      /* Inline display */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
     margin-top: 10%;
-    font-size: 16px;            /* Font size */
-    cursor: pointer;            /* Show pointer cursor on hover */
-    border-radius: 5px;         /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth background color change */
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 #resetButton button:hover {
-    background-color: #45a049;  /* Darker green on hover */
+    background-color: #45a049;
 }
 
 #resetButton button:active {
-    background-color: #3e8e41;  /* Even darker green when clicked */
-    transform: translateY(2px); /* Slight push effect on click */
+    background-color: #3e8e41;
+    transform: translateY(2px);
 }
 
-
 .game-board {
-    width: 75%; /* Takes up the remaining space */
+    width: 75%;
     padding: 10px;
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 2px dashed #b3b2b2;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .palette-section {
-    margin-left: 20px; /* Keep the left margin */
+    margin-left: 20px;
     text-align: center;
 }
 
-#rotateButton {
-    background-color: #4CAF50; /* Green background */
-    border: none; /* No border */
-    color: white; /* White text */
-    padding: 5px 10px; /* Padding around the text */
-    text-align: center; /* Center the text */
-    text-decoration: none; /* No underline */
-    display: inline-block; /* Make it inline-block */
-    font-size: 16px; /* Font size */
-    margin-bottom: 15px;
-    cursor: pointer; /* Pointer cursor on hover */
-    border-radius: 4px; /* Rounded corners */
-    transition: background-color 0.3s; /* Transition for hover effect */
-}
-
-/* Hover effect */
-#rotateButton:hover {
-    background-color: #45a049; /* Darker green on hover */
-}
-
-
-
 .game-sidebar {
-    width: 30%; /* Sidebar takes up 30% of the width */
+    width: 30%;
     padding: 20px;
     background-color: #f2eacb;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* border-radius: 10px; */
-    border: 2px solid black;
+    border: 2px dotted black;
     margin: auto;
     margin-right: 20px;
 }
 
 .game-sidebar h1 {
     font-size: 30px;
-    border: 2px solid black;
+    font-family: sans-serif;
+    border: 2px dotted rgb(255, 255, 255);
     border-radius: 20px;
     padding: 10px;
     margin-bottom: 15px;
-    color: #d4af37;
+    color: #2d2c24;
 }
 
 .game-sidebar .info h2, .game-sidebar .info h3 {
     font-size: 20px;
     margin-bottom: 10px;
     color: #6d5d4b;
+    font-family: sans-serif , Poppins;
 }
 
 .game-sidebar .info p {
@@ -415,84 +338,128 @@ body {
     color: #333;
 }
 
-.game-board {
-    width: 75%; /* Takes up the remaining space */
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
 .game-board table {
     width: 100%;
-    border-collapse: collapse; /* Removes space between cells */
-    border-spacing: 0; /* Ensures no space between cells */
+    border-collapse: collapse;
+    border-spacing: 0;
 }
-
 
 .game-board td {
-    /* width: 70px;
-    height: 70px; */
     padding: 0px;
-    /* border: 1px solid #ddd; */
 }
 
-#designer_name{
-    border: 1px solid black;
+#designer_name {
+    border: 2px inset rgb(209, 176, 161);
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
 #time{
-    border: 1px solid black;
+    border: 2px outset rgb(209, 176, 161);
     border-radius: 10px;
+    margin-bottom: 10px;
 }
+
 .game-board img {
     width: 100%;
     height: 100%;
-    display: block; /* Removes default space caused by images being inline */
-    margin: 0; /* Ensures no margins around the images */
-    /* border: 2px solid #ccc; */
-    /* background-color: #f9f9f9; */
-    /* box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1); */
+    display: block;
+    margin: 0;
 }
-
-
 
 .palette-section {
-    text-align: center; /* Center-align the palette section content */
+    text-align: center;
     margin-left: 20px;
-    border: 2px solid rgb(255, 255, 255);
+    border: 2px solid rgb(209, 176, 161);
     border-radius: 20px;
     padding: 5px;
+    font-family: Poppins, sans-serif;
 }
 
-#option_heading{
+#option_heading {
     font-size: 90%;
 }
 
 .palette-image {
-    width: 70px; /* Set to the width of your original table images */
-    height: 50px; /* Set to the height of your original table images */
-    object-fit: cover; /* Maintain aspect ratio */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    transition: transform 0.3s; /* Smooth scaling effect */
+    width: 70px;
+    height: 50px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+    border: 2px solid rgb(255, 255, 255);
 }
 
 .palette-section table {
-    margin: 0 auto; /* Center the table */
-    /* border: 0px solid black; */
+    margin: 0 auto;
 }
 
 .palette-image:hover {
-    transform: scale(1.5); /* Slightly enlarge on hover for emphasis */
+    transform: scale(1.5);
+}
+
+.selected {
+    border: 3px solid #a68417;
+    background-color: #f2d5a3;
+    color: #000;
+}
+
+.win-animation {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 1000;
+    animation: bounceIn 1s ease forwards;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes bounceIn {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.save-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+    transition: background-color 0.3s;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.save-button:hover {
+    background-color: #45a049;
+}
+
+@keyframes confetti {
+    0% { background-position: 0 0; }
+    100% { background-position: 200% 200%; }
+}
+
+.win-animation {
+    background-image: radial-gradient(circle, #f2d5a3, #eac768, #d09d11);
+    background-size: 200% 200%;
+    animation: confetti 5s linear infinite;
 }
 
 
-
-
-.win-animation {
+.leaderboard-container {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -500,12 +467,34 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
     z-index: 1000;
-    animation: fadeIn 1s ease-in-out;
+    width: 300px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.leaderboard-container h2 {
+    margin-bottom: 10px;
+}
+
+#leaderboardList {
+    list-style: none;
+    padding: 0;
+}
+
+.close-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+#messageBox{
+    color: rgb(93, 9, 9); 
+    display: none; 
+    margin-bottom: 10px; 
+    text-align: center;
 }

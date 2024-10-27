@@ -7,23 +7,26 @@
     <title>Railways Game Menu</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://fonts.google.com/share?selection.family=Edu+AU+VIC+WA+NT+Guides:wght@400..700">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Anton&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body>
     <div class="container-menu">
         <h1 class="title">RAILWAYS</h1>
-        <input class="input-box" type="text" placeholder="WHO ARE YOU?">
+        <input class="input-box" type="text" id="playerNameInput" placeholder="WHO ARE YOU?">
+
         <div class="flex">
             <div class="difficulty">
-                <h2>SET THE DIFFICULTY!</h2>
+                <h2 id="difficulty-title">SET THE DIFFICULTY!</h2>
                 <div class="buttons">
                     <button class="btn easy">5 X 5<br> EASY</button>
                     <button class="btn hard">7 X 7<br> HARD</button>
                 </div>
+                <button id="showLeaderboard">Show LeaderBoard</button>
             </div>
+
             <div class="controls">
                 <button class="btn rules-start" id="rules">RULES</button>
                 <button class="btn rules-start" id="start">START GAME</button>
@@ -67,13 +70,21 @@
                 </ul>
             </li>
         </ul>
-    </div>  
+    </div>
 
 
     <div class="start_game" hidden>
         <div class="game-section">
             <div class="game-sidebar">
-                <h1>RAILWAYS</h1>
+                <button class="backgame-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="mx-3 bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                    </svg>
+                    &nbsp;&nbsp;Back to Homepage
+                </button>
+                <h1 id="railways">RAILWAYS</h1>
                 <div class="info">
                     <div id="designer_name">
                         <h2>Route Designer:</h2>
@@ -90,9 +101,8 @@
             </div>
 
             <div class="game-board">
-                <div id="messageBox" style="color: red; display: none; margin-bottom: 10px; text-align: center;"></div>
+                <div id="messageBox"></div>
                 <table id="gameBoard"></table>
-
                 <table id="gameBoard">
                 </table>
             </div>
@@ -122,26 +132,20 @@
     </div>
 
 
-    <div id="winAnimation" class="win-animation" style="display: none;">
-        <h2>Congratulations! You've won the game!</h2>
-        <p>Enter your name to save your time:</p>
-        <input type="text" id="playerName" placeholder="Your name">
-        <button id="saveScoreButton">Save</button>
+    <div id="winAnimation" class="win-animation">
+        <h2>🎉 Congratulations! You've won the game! 🎉</h2>
+        <button id="saveScoreButton" class="save-button">Save</button>
     </div>
     
 
-
-
-
+    <div class="leaderboard-container" id="leaderboard" hidden>
+        <h2>Leaderboard</h2>
+        <ul id="leaderboardList"></ul>
+        <button class="close-btn" id="closeLeaderboard">Close</button>
+        <button id="resetLeaderboard" class="close-btn">Reset Leaderboard</button>
+    </div>
 
     <script src="index.js"></script>
-</body>
-
-</html>
-
-
-
-<script src="index.js"></script>
 </body>
 
 </html>
