@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railways Game Menu</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://fonts.google.com/share?selection.family=Edu+AU+VIC+WA+NT+Guides:wght@400..700">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container-menu">
+        <h1 class="title">RAILWAYS</h1>
+        <input class="input-box" type="text" placeholder="WHO ARE YOU?">
+        <div class="flex">
+            <div class="difficulty">
+                <h2>SET THE DIFFICULTY!</h2>
+                <div class="buttons">
+                    <button class="btn easy">5 X 5<br> EASY</button>
+                    <button class="btn hard">7 X 7<br> HARD</button>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn rules-start" id="rules">RULES</button>
+                <button class="btn rules-start" id="start">START GAME</button>
+            </div>
+        </div>
+        <div class="railroad"></div>
+    </div>
+
+    <div class="instructions" hidden>
+        <div id="instructions">
+            <button class="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="mx-3 bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>
+                &nbsp;&nbsp;Back to Homepage
+            </button>
+
+        </div>
+
+        <ul>
+            <h2>Game Rules</h2>
+            <li>There are no specific requirements for placing railway elements, so you can decide how you would provide
+                this function.</li>
+            <li>Clicking on cells cycles through the different element types, with options to rotate or delete using the
+                right mouse button.</li>
+            <li>After selecting a tile, elements are chosen from a palette, or you can switch between elements using the
+                arrow keys.</li>
+            <li>Elements can be dragged and dropped onto a tile from a palette.</li>
+            <li>The railway line is drawn by holding down the mouse button and moving across the cells (extra points for
+                this last one).</li>
+            <li><strong>End of the Game:</strong> The game ends when the player correctly completes the puzzle according
+                to the given rules.</li>
+            <li>During the validation of the puzzle's completion, the following elements need to be checked:
+                <ul>
+                    <li>Each cell has two exit points, and the train can enter each neighboring cell from the correct
+                        direction.</li>
+                    <li>Every cell that needs to be touched is touched.</li>
+                    <li>Every cell where no track can be placed remains empty.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>  
+
+
+    <div class="start_game" hidden>
+        <div class="game-section">
+            <div class="game-sidebar">
+                <h1>RAILWAYS</h1>
+                <div class="info">
+                    <div id="designer_name">
+                        <h2>Route Designer:</h2>
+                        <p class="designer">TRICKLES</p>
+                    </div>
+                    <div id="time">
+                        <h3>Elapsed Time:</h3>
+                        <p class="time">00:00</p>
+                    </div>
+                    <div id="resetButton">
+                        <button>Reset Board</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-board">
+                <div id="messageBox" style="color: red; display: none; margin-bottom: 10px; text-align: center;"></div>
+                <table id="gameBoard"></table>
+
+                <table id="gameBoard">
+                </table>
+            </div>
+
+            <div class="palette-section">
+                <h3 id="option_heading">Select Palette</h3>
+                <table>
+                    <tr>
+                        <td><img src="Images/straight_rail.png" alt="straight_rail" class="palette-image"
+                                data-type="straight_rail" data-angle="0"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="Images/curve_rail.png" alt="curve_rail" class="palette-image"
+                                data-type="curve_rail" data-angle="0"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="Images/bridge_rail.png" alt="bridge_rail" class="palette-image"
+                                data-type="bridge_rail" data-angle="0"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="Images/mountain_rail.png" alt="mountain_rail" class="palette-image"
+                                data-type="mountain_rail" data-angle="0"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="winAnimation" class="win-animation" style="display: none;">
+        <h2>Congratulations! You've won the game!</h2>
+        <p>Enter your name to save your time:</p>
+        <input type="text" id="playerName" placeholder="Your name">
+        <button id="saveScoreButton">Save</button>
+    </div>
+    
+
+
+
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>
+
+
+
+<script src="index.js"></script>
+</body>
+
+</html>

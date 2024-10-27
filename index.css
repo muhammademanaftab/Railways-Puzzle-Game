@@ -1,0 +1,511 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('Images/straight_rail.png');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.container-menu {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5); 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 700px;
+}
+
+.title {
+    font-size: 5em;
+    color: #a68417;
+    margin-bottom: 20px;
+    font-family: 'Edu Australia VIC WA NT Hand Guides';
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.input-box {
+    width: 90%;
+    padding: 15px;
+    font-size: 1.2em;
+    border: 2px solid #dfd8b2;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    outline: none;
+    text-align: left;
+    color: #b19f66;
+    background-color: #f5f7e6;
+}
+
+.difficulty {
+    border: px solid rgb(209, 176, 161);
+    padding: 10px;
+    border-radius: 30px;
+}
+
+.difficulty h2 {
+    color: #b7b07d;
+    margin-bottom: 15px;
+    font-family: 'Arial Black', sans-serif;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.btn {
+    font-size: 1em;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.easy,
+.hard {
+    width: 150px;
+    padding: 15px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin: 10px;
+}
+
+.easy {
+    background-color: #edf0d8;
+    color: #5f7a36;
+}
+
+.hard {
+    background-color: #f2e5c7;
+    color: #a86732;
+}
+
+.easy:hover {
+    background-color: #d8e0a6;
+}
+
+.hard:hover {
+    background-color: #e1c899;
+}
+
+.easy:active,
+.hard:active {
+    transform: scale(0.95);
+}
+
+.rules-start {
+    width: 130px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #fff;
+    text-align: center;
+}
+.rules-start:hover {
+    transform: scale(0.95);
+}
+.rules-start:active {
+    transform: scale(0.95);
+}
+
+.controls {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#rules {
+    background-color: rgb(162, 231, 162);
+    border-color: rgb(136, 185, 136);
+    color: rgb(65, 65, 65);
+}
+
+#start {
+    background-color: #a7a5a5;
+    border-color: #828282;
+}
+
+
+.instructions {
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly more opaque for readability */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Adds space above the instructions box */
+    text-align: left; /* Left-aligns the text */
+    color: #333; /* Darker text for better readability */
+    max-width: 700px; /* Max width to prevent stretching on large screens */
+    width: 100%; /* Responsive width */
+}
+
+.instructions h2 {
+    font-size: 2em; /* Adjust font size for the title */
+    color: #b19f66; /* Match color with existing titles */
+    margin-bottom: 10px;
+}
+
+.instructions p {
+    font-size: 1em; /* Normal font size for the paragraph */
+    line-height: 1.5; /* Improves readability */
+    margin: 0; /* Reset margin */
+}
+
+.instructions ul {
+    padding-left: 20px; /* Indent unordered list */
+}
+
+.instructions ul li {
+    font-size: 1em; /* Default size for list items */
+}
+
+#instructions {
+    display: flex;
+    flex-direction: column; /* Stack instructions vertically */
+    align-items: flex-start; /* Align items to start */
+}
+
+ 
+
+.back-btn {
+    display: inline-flex; /* Make it inline-flex for better alignment with icon */
+    align-items: center; /* Center the icon and text vertically */
+    justify-content: center; /* Center the content horizontally */
+    padding: 10px 20px; /* Add padding for spacing */
+    background-color: #eac768; /* Button background color */
+    color: white; /* Text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold text */
+    border: none; /* No border */
+    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow effect */
+    font-weight: bold;
+    font-size: 0.89em;
+}
+
+.back-btn:hover {
+    background-color: #d09d11; /* Darker background color on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 3em;
+    }
+
+    .input-box {
+        width: 95%;
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .difficulty {
+        margin: 10px 0;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .btn {
+        width: 80%;
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .controls {
+        margin-top: 20px;
+    }
+
+    .instructions {
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .instructions h2 {
+        font-size: 1.5em; /* Reduce font size for the heading */
+    }
+
+    .instructions p {
+        font-size: 0.9em; /* Reduce font size for paragraphs */
+    }
+
+    .instructions ul li {
+        font-size: 0.9em; /* Reduce font size for list items */
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 2em;
+    }
+
+    .input-box {
+        font-size: 0.9em;
+    }
+
+    .btn {
+        font-size: 0.8em;
+    }
+    .back-btn {
+        font-size: 0.8em;
+    }
+
+    .rules-start {
+        width: 90%;
+    }
+
+    .instructions {
+        padding: 10px; /* Further reduce padding */
+    }
+
+    .instructions h2 {
+        font-size: 1.2em; /* Reduce font size for the heading */
+    }
+
+    .instructions p {
+        font-size: 0.8em; /* Reduce font size for paragraphs */
+    }
+
+    .instructions ul li {
+        font-size: 0.8em; /* Reduce font size for list items */
+    }
+}
+
+
+.game-section {
+    width: 1000px; /* Match the width of container-menu */
+    margin: 20px auto;
+    background-color: #faf3e0;
+    border: 2px solid #c4a77d;
+    padding: 50px;
+    border-radius: 10px; /* Match the rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center elements */
+    height: 90vh; /* Ensure that the section takes the full height of the viewport */
+    box-sizing: border-box;
+}
+
+.game-sidebar, .game-board, .palette-section {
+    margin: 0; /* Reset any unwanted margin */
+}
+
+#button {
+    text-align: center;  /* Center the button in its container */
+    margin-top: 20px;    /* Add some space from the top */
+}
+
+#resetButton button {
+    background-color: #4CAF50;  /* Green background */
+    border: none;               /* Remove default border */
+    color: white;               /* White text color */
+    padding: 10px 20px;         /* Padding around the button */
+    text-align: center;         /* Center text alignment */
+    text-decoration: none;      /* Remove underline */
+    display: inline-block;      /* Inline display */
+    margin-top: 10%;
+    font-size: 16px;            /* Font size */
+    cursor: pointer;            /* Show pointer cursor on hover */
+    border-radius: 5px;         /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth background color change */
+}
+
+#resetButton button:hover {
+    background-color: #45a049;  /* Darker green on hover */
+}
+
+#resetButton button:active {
+    background-color: #3e8e41;  /* Even darker green when clicked */
+    transform: translateY(2px); /* Slight push effect on click */
+}
+
+
+.game-board {
+    width: 75%; /* Takes up the remaining space */
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.palette-section {
+    margin-left: 20px; /* Keep the left margin */
+    text-align: center;
+}
+
+#rotateButton {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* No border */
+    color: white; /* White text */
+    padding: 5px 10px; /* Padding around the text */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Make it inline-block */
+    font-size: 16px; /* Font size */
+    margin-bottom: 15px;
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+/* Hover effect */
+#rotateButton:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+
+
+.game-sidebar {
+    width: 30%; /* Sidebar takes up 30% of the width */
+    padding: 20px;
+    background-color: #f2eacb;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* border-radius: 10px; */
+    border: 2px solid black;
+    margin: auto;
+    margin-right: 20px;
+}
+
+.game-sidebar h1 {
+    font-size: 30px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #d4af37;
+}
+
+.game-sidebar .info h2, .game-sidebar .info h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #6d5d4b;
+}
+
+.game-sidebar .info p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.game-board {
+    width: 75%; /* Takes up the remaining space */
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.game-board table {
+    width: 100%;
+    border-collapse: collapse; /* Removes space between cells */
+    border-spacing: 0; /* Ensures no space between cells */
+}
+
+
+.game-board td {
+    /* width: 70px;
+    height: 70px; */
+    padding: 0px;
+    /* border: 1px solid #ddd; */
+}
+
+#designer_name{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#time{
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.game-board img {
+    width: 100%;
+    height: 100%;
+    display: block; /* Removes default space caused by images being inline */
+    margin: 0; /* Ensures no margins around the images */
+    /* border: 2px solid #ccc; */
+    /* background-color: #f9f9f9; */
+    /* box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+
+
+.palette-section {
+    text-align: center; /* Center-align the palette section content */
+    margin-left: 20px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 5px;
+}
+
+#option_heading{
+    font-size: 90%;
+}
+
+.palette-image {
+    width: 70px; /* Set to the width of your original table images */
+    height: 50px; /* Set to the height of your original table images */
+    object-fit: cover; /* Maintain aspect ratio */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: transform 0.3s; /* Smooth scaling effect */
+}
+
+.palette-section table {
+    margin: 0 auto; /* Center the table */
+    /* border: 0px solid black; */
+}
+
+.palette-image:hover {
+    transform: scale(1.5); /* Slightly enlarge on hover for emphasis */
+}
+
+
+
+
+.win-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
