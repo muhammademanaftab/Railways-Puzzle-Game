@@ -28,8 +28,6 @@ body {
     padding: 10px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
-
 .title:before {
     content: "";
     position: absolute;
@@ -41,8 +39,6 @@ body {
     border-radius: 15px;
     opacity: 0.7;
 }
-
-
 
 #difficulty-title{
     
