@@ -240,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 imgElement.style.transform = `rotate(${tile.angle}deg)`;
                 cell.appendChild(imgElement);
                 row.appendChild(cell);
+                
 
                 // Right-click event to restore tile to initial state if modified
                 imgElement.addEventListener('contextmenu', function (event) {
@@ -257,9 +258,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Rules for replacement based on current and selected tile types
                         if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
                             canReplace = true;
+                        } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+                            canReplace = true;
+                        } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+                            canReplace = true;
                         } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
                             canReplace = true;
+                        } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
+                            canReplace = true;
                         } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
+                            canReplace = true;
+                        } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
                             canReplace = true;
                         }
 
@@ -716,6 +725,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     setInterval(saveGameState, 30000);
     restoreGameState();
+
+
+
+
+
+    // Functions for mousdrag
 
 
 });
