@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const resetLeaderboardButton = document.querySelector("#resetLeaderboard");
     const insideName = document.querySelector(".designer");
     let resetButton = document.querySelector("#resetButton");
+    let gameActive = false;  
+
 
 
     function resetLeaderboard() {
@@ -93,8 +95,13 @@ document.addEventListener("DOMContentLoaded", function () {
         "bridge": { name: "Bridge", angle: 0, src: "Images/bridge.png" },
         "empty": { name: "Empty Tile", angle: 0, src: "Images/empty.png" },
         "mountain": { name: "Mountain", angle: 0, src: "Images/mountain.png" },
-        "oasis": { name: "Oasis", angle: 0, src: "Images/oasis.png" }
+        "oasis": { name: "Oasis", angle: 0, src: "Images/oasis.png" },
+        "straight_rail": { name: "Straight Rail", angle: 0, src: "Images/straight_rail.png" },
+        "curve_rail": { name: "Curve Rail", angle: 0, src: "Images/curve_rail.png" },
+        "mountain_rail": { name: "Mountain Rail", angle: 0, src: "Images/mountain_rail.png" },
+        "bridge_rail": { name: "Bridge Rail", angle: 0, src: "Images/bridge_rail.png" }
     };
+    
 
     // Layouts
     // Layouts for 5
@@ -306,19 +313,36 @@ document.addEventListener("DOMContentLoaded", function () {
     function getCurrentBoardLayout() {
         const gameBoard = document.getElementById('gameBoard');
         const rows = gameBoard.querySelectorAll('tr');
+    
         const currentLayout = Array.from(rows).map(row => {
             const cells = row.querySelectorAll('td');
             return Array.from(cells).map(cell => {
                 const img = cell.querySelector('img');
-                const altText = img.alt.toLowerCase(); // Get the full alt text
-                const type = altText.replace(' tile', ''); // Remove additional text to match the expected types
-                const angleMatch = img.style.transform.match(/rotate\((\d+)deg\)/);
-                const angle = angleMatch ? parseInt(angleMatch[1], 10) % 360 : 0;
-                return { type: type, angle: angle };
+                if (img) {
+                    // Attempt to determine the type based on the img's alt attribute
+                    const type = img.alt.includes("rail") ? img.alt : Object.keys(mapData).find(key => mapData[key].name === img.alt) || "empty";
+                    const angleMatch = img.style.transform.match(/rotate\((\d+)deg\)/);
+                    const angle = angleMatch ? parseInt(angleMatch[1], 10) % 360 : 0;
+                    
+                    // Debugging output to inspect each cell's properties
+                    console.log("Checking Cell:", cell);
+                    console.log("Image Source:", img.src);
+                    console.log("Image Alt (Type):", img.alt);
+                    console.log("Determined Type:", type);
+                    console.log("Rotation Angle:", angle);
+    
+                    return { type: type, angle: angle };
+                } else {
+                    return { type: "empty", angle: 0 }; // Default for empty cells
+                }
             });
         });
+    
+        console.log("Current Board Layout:", currentLayout); // Full layout debugging output
         return currentLayout;
     }
+    
+    
 
     // printing board layout to check or for check purposes or debugging
     function printCurrentBoardLayout() {
@@ -503,6 +527,8 @@ document.addEventListener("DOMContentLoaded", function () {
         playerNameInput.value = "";        
         hardButton.classList.remove("selected");        
         easyButton.classList.remove("selected");
+        localStorage.removeItem("savedGameState");
+        localStorage.removeItem("playerName"); 
     }
 
     // to populating palette images or to debug
@@ -553,17 +579,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     start_btn.addEventListener("click", function () {
         const playerName = playerNameInput.value.trim();
-
+        
         if (!playerName) {
             alert("Please enter your name.");
             return;
         }
-
+        
         if (!selectedDifficulty) {
             alert("Please select a difficulty level.");
             return;
         }
-
+        
+        gameActive = true;
         if (selectedDifficulty === "5x5") {
             bestLayout = layouts_5;
         } else {
@@ -606,5 +633,89 @@ document.addEventListener("DOMContentLoaded", function () {
     closeLeaderboardButton.addEventListener("click", function () {
         leaderboardContainer.hidden = true;
     });
+
+
+
+
+
+    // Doing bonus points
+    function saveGameState() {
+        if (gameActive) {  // Only save if the game is active
+            const gameState = {
+                playerName: playerNameInput.value.trim(),
+                selectedDifficulty: selectedDifficulty,
+                timer: timerDisplay.textContent,
+                boardLayout: getCurrentBoardLayout() 
+            };
+            localStorage.setItem("savedGameState", JSON.stringify(gameState));
+            console.log("Game state saved:", gameState);
+        }
+    }
+    
+    
+    // Function to restore the game state
+    function restoreGameState() {
+        const savedState = JSON.parse(localStorage.getItem("savedGameState"));
+        if (savedState) {
+            // Set player name and display it
+            playerNameInput.value = savedState.playerName;
+            insideName.textContent = savedState.playerName || "Player"; 
+    
+            // Restore difficulty selection
+            selectedDifficulty = savedState.selectedDifficulty;
+            timerDisplay.textContent = savedState.timer;
+            
+            // Set initial layout from saved data
+            initialLayout = savedState.boardLayout;
+            console.log("Restoring board layout:", initialLayout);
+    
+            // Restore difficulty button selection
+            if (selectedDifficulty === "5x5") {
+                easyButton.classList.add("selected");
+                hardButton.classList.remove("selected");
+                bestLayout = layouts_5;
+            } else if (selectedDifficulty === "7x7") {
+                hardButton.classList.add("selected");
+                easyButton.classList.remove("selected");
+                bestLayout = layouts_7;
+            }
+    
+            // Set up game view
+            container_menu.hidden = true;
+            game_start.hidden = false;
+            
+            // Populate the game board with the full layout
+            populateGameBoard(initialLayout);
+    
+            // Start the timer from saved time
+            resumeTimerFromSaved(savedState.timer);
+            console.log("Game state restored:", savedState);
+        } else {
+            console.log("No saved game state found.");
+        }
+    }
+    
+    // Function to start/resume the timer from saved time
+    function resumeTimerFromSaved(savedTime) {
+        const [minutes, seconds] = savedTime.split(":").map(Number);
+        const savedElapsedMs = (minutes * 60 + seconds) * 1000;
+        startTime = new Date(new Date() - savedElapsedMs);
+    
+        // Resume the timer from the saved point
+        timer = setInterval(function () {
+            const elapsedTime = new Date() - startTime;
+            const currentSeconds = Math.floor((elapsedTime / 1000) % 60);
+            const currentMinutes = Math.floor((elapsedTime / 1000 / 60) % 60);
+            timerDisplay.textContent = formatTime(currentMinutes) + ':' + formatTime(currentSeconds);
+            
+            if (checkWinCondition(getCurrentBoardLayout())) {
+                stopTimer();
+                displayWinAnimation(currentMinutes, currentSeconds);
+            }
+        }, 500);
+    }
+    setInterval(saveGameState, 30000);
+    restoreGameState();
+
 
 });
