@@ -22,6 +22,68 @@ document.addEventListener("DOMContentLoaded", function () {
     let gameActive = false;  
 
 
+    let isMouseDown = false; 
+    function setupDragPlacement(cell, rowIndex, colIndex) {
+        // Mousedown event starts the drag
+        cell.addEventListener('mousedown', function (event) {
+            event.preventDefault();
+            isMouseDown = true;
+            applyTileToCell(cell, rowIndex, colIndex); // Apply tile on the initial cell
+        });
+
+        // Mouseup event stops the drag
+        cell.addEventListener('mouseup', function () {
+            isMouseDown = false;
+        });
+
+        // Mousemove event applies tile to each cell while dragging
+        cell.addEventListener('mousemove', function () {
+            if (isMouseDown) {
+                applyTileToCell(cell, rowIndex, colIndex);
+            }
+        });
+
+        
+    }
+
+
+    function applyTileToCell(cell, rowIndex, colIndex) {
+        if (selectedTile) {
+            const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
+            const selectedTileType = selectedTile.name;
+
+            let canReplace = false;
+
+            // Tile replacement rules
+            if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+                canReplace = true;
+            } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
+                canReplace = true;
+            } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
+                canReplace = true;
+            } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+                canReplace = true;
+            } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+                canReplace = true;
+            } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
+                canReplace = true;
+            } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
+                canReplace = true;
+            }
+
+            // Apply selected tile if replacement is allowed
+            if (canReplace) {
+                cell.querySelector('img').src = selectedTile.src;
+                cell.querySelector('img').alt = selectedTile.name;
+                console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
+            } else {
+                console.log("Invalid move: Cannot replace this tile!");
+            }
+        }
+    }
+
+
+
 
     function resetLeaderboard() {
         localStorage.removeItem("leaderboard");
@@ -293,6 +355,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     event.stopPropagation();
                 });
+
+                setupDragPlacement(cell, rowIndex, colIndex);
             });
             gameBoard.appendChild(row);
         });
@@ -729,8 +793,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-    // Functions for mousdrag
 
 
 });
