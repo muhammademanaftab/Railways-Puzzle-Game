@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const insideName = document.querySelector(".designer");
     let resetButton = document.querySelector("#resetButton");
     let gameActive = false;  
+    let originalLayout = null;
 
 
     let isMouseDown = false; 
@@ -46,9 +47,17 @@ document.addEventListener("DOMContentLoaded", function () {
         
     }
 
-
     function applyTileToCell(cell, rowIndex, colIndex) {
-        if (selectedTile) {
+        
+        if (!selectedTile) {
+            // Directly clear the cell's content when removing a tile
+            cell.querySelector('img').src = mapData["empty"].src;
+            cell.querySelector('img').alt = mapData["empty"].name;
+            console.log(`Tile removed at (${rowIndex}, ${colIndex})`);
+            return;
+        }
+
+
             const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
             const selectedTileType = selectedTile.name;
 
@@ -77,11 +86,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 cell.querySelector('img').alt = selectedTile.name;
                 console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
             } else {
-                console.log("Invalid move: Cannot replace this tile!");
+                showMessage("Invalid move: Cannot replace this tile!");
             }
-        }
+        
     }
-
 
 
 
@@ -362,6 +370,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    document.addEventListener("mouseup", function () {
+        isMouseDown = false;
+    });
+
     //Function to delete tile and get old tile
     function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
         const currentTile = getCurrentBoardLayout()[rowIndex][colIndex];
@@ -398,11 +410,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     const angle = angleMatch ? parseInt(angleMatch[1], 10) % 360 : 0;
                     
                     // Debugging output to inspect each cell's properties
-                    console.log("Checking Cell:", cell);
-                    console.log("Image Source:", img.src);
-                    console.log("Image Alt (Type):", img.alt);
-                    console.log("Determined Type:", type);
-                    console.log("Rotation Angle:", angle);
+                    // console.log("Checking Cell:", cell);
+                    // console.log("Image Source:", img.src);
+                    // console.log("Image Alt (Type):", img.alt);
+                    // console.log("Determined Type:", type);
+                    // console.log("Rotation Angle:", angle);
     
                     return { type: type, angle: angle };
                 } else {
@@ -607,6 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // to populating palette images or to debug
     const paletteImages = document.querySelectorAll(".palette-image");
     paletteImages.forEach((img) => {
+        img.draggable = true;
         img.addEventListener("click", function () {
             selectedTile = {
                 src: img.src,
@@ -614,6 +627,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 angle: 0
             };
             console.log("Selected tile:", selectedTile);
+        });
+
+        img.addEventListener("dragstart", function (event) {
+            selectedTile = {
+                src: img.src,
+                name: img.alt,
+                angle: 0
+            };
+            event.dataTransfer.setData("text/plain", img.alt);
         });
     });
 
@@ -671,6 +693,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         initialLayout = getRandomLayout();
+        originalLayout = JSON.parse(JSON.stringify(initialLayout)); 
+
 
         container_menu.hidden = true;
         game_start.hidden = false;
@@ -792,6 +816,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
+    // Darg and drop
+
+    function setupDragPlacement(cell, rowIndex, colIndex) {
+        // Mousedown event for click-and-drag
+        cell.addEventListener("mousedown", function (event) {
+            event.preventDefault();
+            isMouseDown = true;
+            applyTileToCell(cell, rowIndex, colIndex);
+        });
+
+        // Mouseup event to stop drag
+        cell.addEventListener("mouseup", function () {
+            isMouseDown = false;
+        });
+
+        // Mousemove event to continue placing tiles while dragging
+        cell.addEventListener("mousemove", function () {
+            if (isMouseDown) {
+                applyTileToCell(cell, rowIndex, colIndex);
+            }
+        });
+
+        // Dragover event for allowing drop on cell
+        cell.addEventListener("dragover", function (event) {
+            event.preventDefault();
+        });
+
+        // Drop event to place tile on cell
+        cell.addEventListener("drop", function (event) {
+            event.preventDefault();
+            if (selectedTile) {
+                applyTileToCell(cell, rowIndex, colIndex);
+            }
+        });
+    }
 
 
 
