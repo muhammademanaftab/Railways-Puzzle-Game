@@ -19,76 +19,80 @@ document.addEventListener("DOMContentLoaded", function () {
     const resetLeaderboardButton = document.querySelector("#resetLeaderboard");
     const insideName = document.querySelector(".designer");
     let resetButton = document.querySelector("#resetButton");
-    let gameActive = false;  
+    let gameActive = false;
     let originalLayout = null;
 
 
-    let isMouseDown = false; 
+    // Drag and Drop Functionality
+    let isMouseDown = false;
     function setupDragPlacement(cell, rowIndex, colIndex) {
-        // Mousedown event starts the drag
-        cell.addEventListener('mousedown', function (event) {
+        // Mousedown event for click-and-drag
+        cell.addEventListener("mousedown", function (event) {
             event.preventDefault();
             isMouseDown = true;
-            applyTileToCell(cell, rowIndex, colIndex); // Apply tile on the initial cell
+            applyTileToCell(cell, rowIndex, colIndex);
         });
 
-        // Mouseup event stops the drag
-        cell.addEventListener('mouseup', function () {
+        // Mouseup event to stop drag
+        cell.addEventListener("mouseup", function () {
             isMouseDown = false;
         });
 
-        // Mousemove event applies tile to each cell while dragging
-        cell.addEventListener('mousemove', function () {
+        // Mousemove event to continue placing tiles while dragging
+        cell.addEventListener("mousemove", function () {
             if (isMouseDown) {
                 applyTileToCell(cell, rowIndex, colIndex);
             }
         });
 
-        
-    }
+        // Dragover event for allowing drop on cell
+        cell.addEventListener("dragover", function (event) {
+            event.preventDefault();
+        });
 
+        // Drop event to place tile on cell
+        cell.addEventListener("drop", function (event) {
+            event.preventDefault();
+            if (selectedTile) {
+                applyTileToCell(cell, rowIndex, colIndex);
+            }
+        });
+    }
     function applyTileToCell(cell, rowIndex, colIndex) {
-        
         if (!selectedTile) {
-            // Directly clear the cell's content when removing a tile
-            cell.querySelector('img').src = mapData["empty"].src;
-            cell.querySelector('img').alt = mapData["empty"].name;
-            console.log(`Tile removed at (${rowIndex}, ${colIndex})`);
             return;
         }
+        const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
+        const selectedTileType = selectedTile.name;
 
+        let canReplace = false;
 
-            const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
-            const selectedTileType = selectedTile.name;
+        // Tile replacement rules
+        if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+            canReplace = true;
+        } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
+            canReplace = true;
+        } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
+            canReplace = true;
+        } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+            canReplace = true;
+        } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+            canReplace = true;
+        } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
+            canReplace = true;
+        } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
+            canReplace = true;
+        }
 
-            let canReplace = false;
+        // Apply selected tile if replacement is allowed
+        if (canReplace) {
+            cell.querySelector('img').src = selectedTile.src;
+            cell.querySelector('img').alt = selectedTile.name;
+            console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
+        } else {
+            showMessage("Invalid move: Cannot replace this tile!");
+        }
 
-            // Tile replacement rules
-            if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-                canReplace = true;
-            } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
-                canReplace = true;
-            } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
-                canReplace = true;
-            } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-                canReplace = true;
-            } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-                canReplace = true;
-            } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
-                canReplace = true;
-            } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
-                canReplace = true;
-            }
-
-            // Apply selected tile if replacement is allowed
-            if (canReplace) {
-                cell.querySelector('img').src = selectedTile.src;
-                cell.querySelector('img').alt = selectedTile.name;
-                console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
-            } else {
-                showMessage("Invalid move: Cannot replace this tile!");
-            }
-        
     }
 
 
@@ -119,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Win Condition Check:", isWin);
             if (isWin) {
                 stopTimer();
-                displayWinAnimation(minutes, seconds);                
+                displayWinAnimation(minutes, seconds);
             }
         }, 500);
     }
@@ -127,16 +131,16 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayWinAnimation(minutes, seconds) {
         stopTimer();
         winAnimation.style.display = "block";
-    
+
         const saveScoreButton = document.getElementById("saveScoreButton");
         saveScoreButton.onclick = function () {
             const playerName = document.getElementById("playerNameInput").value.trim() || "Player";
             const time = formatTime(minutes) + ":" + formatTime(seconds);
-    
+
             const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
             leaderboard.push({ name: playerName, time: time });
             localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-    
+
             alert(`Score saved for ${playerName}! Time: ${time}`);
             winAnimation.style.display = "none";
             resetEverything();
@@ -144,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
             game_start.hidden = true;
         };
     }
-    
+
     function formatTime(time) {
         return time < 10 ? '0' + time : time;
     }
@@ -171,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "mountain_rail": { name: "Mountain Rail", angle: 0, src: "Images/mountain_rail.png" },
         "bridge_rail": { name: "Bridge Rail", angle: 0, src: "Images/bridge_rail.png" }
     };
-    
+
 
     // Layouts
     // Layouts for 5
@@ -310,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 imgElement.style.transform = `rotate(${tile.angle}deg)`;
                 cell.appendChild(imgElement);
                 row.appendChild(cell);
-                
+
 
                 // Right-click event to restore tile to initial state if modified
                 imgElement.addEventListener('contextmenu', function (event) {
@@ -352,14 +356,15 @@ document.addEventListener("DOMContentLoaded", function () {
                             } else {
                                 imgElement.style.transform = `rotate(${tile.angle}deg)`;
                             }
-                        } else {
-                            showMessage("Invalid move: Cannot replace this tile!");
-                        }
+                        } 
+                        // if(!selectedTile) {
+                        //     showMessage("Invalid move: Cannot replace this tile!");
+                        // }
                     }
-                    printCurrentBoardLayout();
-                    areRailsConnected(getCurrentBoardLayout());
-                    areRailsConnected(getCurrentBoardLayout());
-                    checkWinCondition(getCurrentBoardLayout())
+                    // printCurrentBoardLayout();
+                    // areRailsConnected(getCurrentBoardLayout());
+                    // areRailsConnected(getCurrentBoardLayout());
+                    // checkWinCondition(getCurrentBoardLayout())
 
                     event.stopPropagation();
                 });
@@ -370,16 +375,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    document.addEventListener("mouseup", function () {
-        isMouseDown = false;
-    });
+    // document.addEventListener("mouseup", function () {
+    //     isMouseDown = false;
+    // });
 
     //Function to delete tile and get old tile
     function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
         const currentTile = getCurrentBoardLayout()[rowIndex][colIndex];
-        const originalTile = initialLayout[rowIndex][colIndex]; // Use initialLayout which should be globally accessible
+        const originalTile = originalLayout[rowIndex][colIndex]; // Use originalLayout here
+
         if (currentTile.type !== originalTile.type || currentTile.angle !== originalTile.angle) {
-            // Restore original state
             const tileData = mapData[originalTile.type];
             imgElement.src = tileData.src;
             imgElement.alt = tileData.name;
@@ -389,16 +394,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to rotate tile
-    function rotateTile(imgElement, tile) {
-        tile.angle = (tile.angle + 90) % 360; // Increment the angle by 90 degrees and ensure it wraps around at 360 degrees
-        imgElement.style.transform = `rotate(${tile.angle}deg)`; // Apply the new rotation
-    }
+    // function rotateTile(imgElement, tile) {
+    //     tile.angle = (tile.angle + 90) % 360; // Increment the angle by 90 degrees and ensure it wraps around at 360 degrees
+    //     imgElement.style.transform = `rotate(${tile.angle}deg)`; // Apply the new rotation
+    // }
 
     // Function to get layer of board present condition
     function getCurrentBoardLayout() {
         const gameBoard = document.getElementById('gameBoard');
         const rows = gameBoard.querySelectorAll('tr');
-    
+
         const currentLayout = Array.from(rows).map(row => {
             const cells = row.querySelectorAll('td');
             return Array.from(cells).map(cell => {
@@ -408,26 +413,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     const type = img.alt.includes("rail") ? img.alt : Object.keys(mapData).find(key => mapData[key].name === img.alt) || "empty";
                     const angleMatch = img.style.transform.match(/rotate\((\d+)deg\)/);
                     const angle = angleMatch ? parseInt(angleMatch[1], 10) % 360 : 0;
-                    
+
                     // Debugging output to inspect each cell's properties
                     // console.log("Checking Cell:", cell);
                     // console.log("Image Source:", img.src);
                     // console.log("Image Alt (Type):", img.alt);
                     // console.log("Determined Type:", type);
                     // console.log("Rotation Angle:", angle);
-    
+
                     return { type: type, angle: angle };
                 } else {
                     return { type: "empty", angle: 0 }; // Default for empty cells
                 }
             });
         });
-    
+
         console.log("Current Board Layout:", currentLayout); // Full layout debugging output
         return currentLayout;
     }
-    
-    
+
+
 
     // printing board layout to check or for check purposes or debugging
     function printCurrentBoardLayout() {
@@ -594,11 +599,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // function that will reset the board to its initial state 
     function resetBoard() {
-        populateGameBoard(initialLayout);
+        populateGameBoard(originalLayout);
     }
 
     // making reset button
-    
+
     if (resetButton) {
         resetButton.addEventListener("click", resetBoard);
     }
@@ -609,11 +614,11 @@ document.addEventListener("DOMContentLoaded", function () {
         game_start.hidden = true;
         resetBoard();
         resetTimer();
-        playerNameInput.value = "";        
-        hardButton.classList.remove("selected");        
+        playerNameInput.value = "";
+        hardButton.classList.remove("selected");
         easyButton.classList.remove("selected");
         localStorage.removeItem("savedGameState");
-        localStorage.removeItem("playerName"); 
+        localStorage.removeItem("playerName");
     }
 
     // to populating palette images or to debug
@@ -674,17 +679,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     start_btn.addEventListener("click", function () {
         const playerName = playerNameInput.value.trim();
-        
+
         if (!playerName) {
             alert("Please enter your name.");
             return;
         }
-        
+
         if (!selectedDifficulty) {
             alert("Please select a difficulty level.");
             return;
         }
-        
+
         gameActive = true;
         if (selectedDifficulty === "5x5") {
             bestLayout = layouts_5;
@@ -693,7 +698,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         initialLayout = getRandomLayout();
-        originalLayout = JSON.parse(JSON.stringify(initialLayout)); 
+
+        originalLayout = JSON.parse(JSON.stringify(initialLayout));
+        localStorage.setItem("originalLayout", JSON.stringify(originalLayout));
 
 
         container_menu.hidden = true;
@@ -702,19 +709,19 @@ document.addEventListener("DOMContentLoaded", function () {
         startTimer();
     });
 
-    backgame_btn.addEventListener("click", ()=>{
+    backgame_btn.addEventListener("click", () => {
         resetEverything();
     })
 
     function displayLeaderboard() {
         leaderboardList.innerHTML = "";
-    
-        const scores = JSON.parse(localStorage.getItem("leaderboard")) || [];    
+
+        const scores = JSON.parse(localStorage.getItem("leaderboard")) || [];
         scores.sort((a, b) => {
             const [aMinutes, aSeconds] = a.time.split(":").map(Number);
             const [bMinutes, bSeconds] = b.time.split(":").map(Number);
             return aMinutes * 60 + aSeconds - (bMinutes * 60 + bSeconds);
-        });    
+        });
         scores.forEach((score, index) => {
             const listItem = document.createElement("li");
             listItem.textContent = `${index + 1}. ${score.name} - ${score.time}`;
@@ -742,30 +749,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 playerName: playerNameInput.value.trim(),
                 selectedDifficulty: selectedDifficulty,
                 timer: timerDisplay.textContent,
-                boardLayout: getCurrentBoardLayout() 
+                boardLayout: getCurrentBoardLayout()
             };
             localStorage.setItem("savedGameState", JSON.stringify(gameState));
             console.log("Game state saved:", gameState);
         }
     }
-    
-    
+
+
     // Function to restore the game state
     function restoreGameState() {
         const savedState = JSON.parse(localStorage.getItem("savedGameState"));
+        const savedOriginalLayout = JSON.parse(localStorage.getItem("originalLayout"));
+        if (savedOriginalLayout) {
+            originalLayout = savedOriginalLayout;
+            console.log("Restored original layout from localStorage:", originalLayout);
+        } else {
+            console.log("No original layout found in localStorage.");
+        }
+
         if (savedState) {
             // Set player name and display it
             playerNameInput.value = savedState.playerName;
-            insideName.textContent = savedState.playerName || "Player"; 
-    
+            insideName.textContent = savedState.playerName || "Player";
+
             // Restore difficulty selection
             selectedDifficulty = savedState.selectedDifficulty;
             timerDisplay.textContent = savedState.timer;
-            
+
             // Set initial layout from saved data
             initialLayout = savedState.boardLayout;
             console.log("Restoring board layout:", initialLayout);
-    
+
             // Restore difficulty button selection
             if (selectedDifficulty === "5x5") {
                 easyButton.classList.add("selected");
@@ -776,14 +791,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 easyButton.classList.remove("selected");
                 bestLayout = layouts_7;
             }
-    
+
             // Set up game view
             container_menu.hidden = true;
             game_start.hidden = false;
-            
+
             // Populate the game board with the full layout
             populateGameBoard(initialLayout);
-    
+
             // Start the timer from saved time
             resumeTimerFromSaved(savedState.timer);
             console.log("Game state restored:", savedState);
@@ -791,20 +806,20 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("No saved game state found.");
         }
     }
-    
+
     // Function to start/resume the timer from saved time
     function resumeTimerFromSaved(savedTime) {
         const [minutes, seconds] = savedTime.split(":").map(Number);
         const savedElapsedMs = (minutes * 60 + seconds) * 1000;
         startTime = new Date(new Date() - savedElapsedMs);
-    
+
         // Resume the timer from the saved point
         timer = setInterval(function () {
             const elapsedTime = new Date() - startTime;
             const currentSeconds = Math.floor((elapsedTime / 1000) % 60);
             const currentMinutes = Math.floor((elapsedTime / 1000 / 60) % 60);
             timerDisplay.textContent = formatTime(currentMinutes) + ':' + formatTime(currentSeconds);
-            
+
             if (checkWinCondition(getCurrentBoardLayout())) {
                 stopTimer();
                 displayWinAnimation(currentMinutes, currentSeconds);
@@ -820,40 +835,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Darg and drop
 
-    function setupDragPlacement(cell, rowIndex, colIndex) {
-        // Mousedown event for click-and-drag
-        cell.addEventListener("mousedown", function (event) {
-            event.preventDefault();
-            isMouseDown = true;
-            applyTileToCell(cell, rowIndex, colIndex);
-        });
-
-        // Mouseup event to stop drag
-        cell.addEventListener("mouseup", function () {
-            isMouseDown = false;
-        });
-
-        // Mousemove event to continue placing tiles while dragging
-        cell.addEventListener("mousemove", function () {
-            if (isMouseDown) {
-                applyTileToCell(cell, rowIndex, colIndex);
-            }
-        });
-
-        // Dragover event for allowing drop on cell
-        cell.addEventListener("dragover", function (event) {
-            event.preventDefault();
-        });
-
-        // Drop event to place tile on cell
-        cell.addEventListener("drop", function (event) {
-            event.preventDefault();
-            if (selectedTile) {
-                applyTileToCell(cell, rowIndex, colIndex);
-            }
-        });
-    }
-
+   
 
 
 });
