@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const resetLeaderboardButton = document.querySelector("#resetLeaderboard");
     const insideName = document.querySelector(".designer");
     let resetButton = document.querySelector("#resetButton");
-    let gameActive = false;
+    let saveGameButton = document.querySelector("#saveGameButton")
+    // let gameActive = false;
     let originalLayout = null;
+
 
 
     // Drag and Drop Functionality
@@ -356,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             } else {
                                 imgElement.style.transform = `rotate(${tile.angle}deg)`;
                             }
-                        } 
+                        }
                         // if(!selectedTile) {
                         //     showMessage("Invalid move: Cannot replace this tile!");
                         // }
@@ -612,14 +614,38 @@ document.addEventListener("DOMContentLoaded", function () {
     function resetEverything() {
         container_menu.hidden = false;
         game_start.hidden = true;
-        resetBoard();
-        resetTimer();
+        // gameActive = false;
+        selectedTile = null;
+        selectedDifficulty = null;
+        bestLayout = null;
+        
+        // Clear UI selections and inputs
         playerNameInput.value = "";
-        hardButton.classList.remove("selected");
+        insideName.textContent = "Player";
+        timerDisplay.textContent = "00:00";
+        
+        // Reset difficulty button styles
         easyButton.classList.remove("selected");
+        hardButton.classList.remove("selected");
+    
+        // Stop and reset the timer
+        stopTimer();
+    
+        // Clear saved data in localStorage
         localStorage.removeItem("savedGameState");
+        localStorage.removeItem("originalLayout");
         localStorage.removeItem("playerName");
+    
+        // Reset the board layout to original or initial state
+        if (originalLayout) {
+            populateGameBoard(originalLayout);
+        } else {
+            resetBoard();
+        }
+    
+        console.log("Game has been reset.");
     }
+    
 
     // to populating palette images or to debug
     const paletteImages = document.querySelectorAll(".palette-image");
@@ -690,7 +716,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        gameActive = true;
+        // gameActive = true;
         if (selectedDifficulty === "5x5") {
             bestLayout = layouts_5;
         } else {
@@ -744,17 +770,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Doing bonus points
     function saveGameState() {
-        if (gameActive) {  // Only save if the game is active
-            const gameState = {
-                playerName: playerNameInput.value.trim(),
-                selectedDifficulty: selectedDifficulty,
-                timer: timerDisplay.textContent,
-                boardLayout: getCurrentBoardLayout()
-            };
-            localStorage.setItem("savedGameState", JSON.stringify(gameState));
-            console.log("Game state saved:", gameState);
-        }
+        const gameState = {
+            playerName: playerNameInput.value.trim(),
+            selectedDifficulty: selectedDifficulty,
+            timer: timerDisplay.textContent,
+            boardLayout: getCurrentBoardLayout()
+        };
+        localStorage.setItem("savedGameState", JSON.stringify(gameState));
+        console.log("Game state saved:", gameState);
     }
+    
 
 
     // Function to restore the game state
@@ -826,7 +851,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, 500);
     }
-    setInterval(saveGameState, 30000);
+    saveGameButton.addEventListener("click", saveGameState);
+
     restoreGameState();
 
 
@@ -835,7 +861,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Darg and drop
 
-   
+
 
 
 });

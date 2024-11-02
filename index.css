@@ -262,29 +262,30 @@ body {
     margin-top: 20px;
 }
 
-#resetButton button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10%;
+#resetandSave-btn {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#resetButton,
+#saveGameButton {
+    padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
+    border: none;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
-#resetButton button:hover {
-    background-color: #45a049;
+#resetButton:hover,
+#saveGameButton:hover {
+    background-color: #45a049; /* Darker green on hover */
 }
 
-#resetButton button:active {
-    background-color: #3e8e41;
-    transform: translateY(2px);
-}
 
 .game-board {
     width: 75%;
