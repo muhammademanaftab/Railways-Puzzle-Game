@@ -14,6 +14,7 @@
 
 <body>
     <div class="container-menu">
+        <div id="main_screen_msg_box"></div>            
         <h1 class="title triple-cut-text">RAILWAYS</h1>
         <input class="input-box" type="text" id="playerNameInput" placeholder="WHO ARE YOU?">
 
@@ -114,26 +115,28 @@
                 <table>
                     <tr>
                         <td><img src="Images/straight_rail.png" alt="straight_rail" class="palette-image"
-                                data-type="straight_rail" data-angle="0"></td>
+                                data-type="straight_rail" data-angle="0" data-click-count="0"></td>
                     </tr>
                     <tr>
                         <td><img src="Images/curve_rail.png" alt="curve_rail" class="palette-image"
-                                data-type="curve_rail" data-angle="0"></td>
+                                data-type="curve_rail" data-angle="0" data-click-count="0"></td>
                     </tr>
                     <tr>
                         <td><img src="Images/bridge_rail.png" alt="bridge_rail" class="palette-image"
-                                data-type="bridge_rail" data-angle="0"></td>
+                                data-type="bridge_rail" data-angle="0" data-click-count="0"></td>
                     </tr>
                     <tr>
                         <td><img src="Images/mountain_rail.png" alt="mountain_rail" class="palette-image"
-                                data-type="mountain_rail" data-angle="0"></td>
+                                data-type="mountain_rail" data-angle="0" data-click-count="0"></td>
                     </tr>
                 </table>
             </div>
+            
         </div>
     </div>
 
 
+    <div id="overlay"></div>    
     <div id="winAnimation" class="win-animation">
         <h2>🎉 Congratulations! You've won the game! 🎉</h2>
         <button id="saveScoreButton" class="save-button">Save</button>
