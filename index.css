@@ -394,6 +394,12 @@ body {
     transform: scale(1.5);
 }
 
+.active-palette {
+    border: 2px solid rgb(0, 123, 255); /* Color for active selection */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional shadow for emphasis */
+}
+
+
 .selected {
     border: 3px solid #a68417;
     background-color: #f2d5a3;

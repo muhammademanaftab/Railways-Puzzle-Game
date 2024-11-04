@@ -234,12 +234,10 @@ function populateGameBoard(layout) {
                 let clickCount = parseInt(imgElement.getAttribute("data-click-count"));
 
                 if (clickCount === 0) {
-                    // First click: place the tile without rotation
                     if (selectedTile) {
                         const currentTileType = tile.type;
                         const selectedTileType = selectedTile.name;
 
-                        // Same replacement rules as before
                         let canReplace = false;
                         if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
                             canReplace = true;
@@ -599,22 +597,34 @@ function resetEverything() {
 
 
 const paletteImages = document.querySelectorAll(".palette-image");
+let currentPaletteIndex = 0; 
+// function for using arrow keys for selection of palettes 
 
-paletteImages.forEach((img) => {
-    // Using click count so that rotate the image accordinlgy, once or twice, like when first we click don't rotate it's just placed there and on second click it wil rotate
+function updateActivePalette(index) {
+    paletteImages.forEach((img) => img.classList.remove("active-palette"));
+
+    const img = paletteImages[index];
+    img.classList.add("active-palette");
+
+    selectedTile = {
+        src: img.src,
+        name: img.alt.includes("rail") ? img.alt : "",
+        angle: 0
+    };
+}
+updateActivePalette(currentPaletteIndex);
+
+paletteImages.forEach((img, index) => {
     img.setAttribute("data-click-count", 0);
     img.draggable = true;
-    img.addEventListener("click", function () {
 
+    img.addEventListener("click", function () {
+        currentPaletteIndex = index; 
+        updateActivePalette(currentPaletteIndex); 
         let clickCount = parseInt(img.getAttribute("data-click-count"));
         img.setAttribute("data-click-count", clickCount + 1);
-
-        selectedTile = {
-            src: img.src,
-            name: img.alt.includes("rail") ? img.alt : "",
-            angle: 0 
-        };
     });
+
     img.addEventListener("dragstart", function (event) {
         selectedTile = {
             src: img.src,
@@ -623,6 +633,25 @@ paletteImages.forEach((img) => {
         };
         event.dataTransfer.setData("text/plain", img.alt);
     });
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown") {
+        currentPaletteIndex = (currentPaletteIndex + 1) % paletteImages.length;
+    }else if (event.key === "ArrowUp") {
+        currentPaletteIndex = (currentPaletteIndex - 1 + paletteImages.length) % paletteImages.length;
+    } 
+    else if (event.key === "ArrowRight") {
+        currentPaletteIndex = (currentPaletteIndex - 1 + paletteImages.length) % paletteImages.length;
+    } 
+    else if (event.key === "ArrowLeft") {
+        currentPaletteIndex = (currentPaletteIndex + 1) % paletteImages.length;
+    }
+    else {
+        return; 
+    }
+
+    updateActivePalette(currentPaletteIndex); 
 });
 
 // Win Animation
