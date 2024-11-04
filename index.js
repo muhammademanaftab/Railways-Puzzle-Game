@@ -254,21 +254,24 @@ function populateGameBoard(layout) {
                         }
 
                         if (canReplace) {
-                            // Place the selected tile without rotation
                             imgElement.src = selectedTile.src;
                             imgElement.alt = selectedTile.name;
-                            imgElement.style.transform = `rotate(${tile.angle}deg)`;
 
-                            // Update click count
+                            if (selectedTileType !== "bridge_rail" && selectedTileType !== "mountain_rail") {
+                                imgElement.style.transform = `rotate(${selectedTile.angle}deg)`;
+                            } else {
+                                imgElement.style.transform = `rotate(${tile.angle}deg)`;
+                            }
+
                             imgElement.setAttribute("data-click-count", clickCount + 1);
                         }
                     }
                 } else {
-                    // Second or subsequent clicks: rotate the tile
-                    selectedTile.angle = (selectedTile.angle + 90) % 360;
-                    imgElement.style.transform = `rotate(${selectedTile.angle}deg)`;
+                    if (selectedTile && selectedTile.name !== "bridge_rail" && selectedTile.name !== "mountain_rail") {
+                        selectedTile.angle = (selectedTile.angle + 90) % 360;
+                        imgElement.style.transform = `rotate(${selectedTile.angle}deg)`;
+                    }
 
-                    // Increment click count
                     imgElement.setAttribute("data-click-count", clickCount + 1);
                 }
 
