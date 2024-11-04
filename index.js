@@ -19,99 +19,17 @@ const resetLeaderboardButton = document.querySelector("#resetLeaderboard");
 const insideName = document.querySelector(".designer");
 let resetButton = document.querySelector("#resetButton");
 let saveGameButton = document.querySelector("#saveGameButton")
-// let gameActive = false;
 let originalLayout = null;
-
-
-
-// Drag and Drop Functionality
-let isMouseDown = false;
-function setupDragPlacement(cell, rowIndex, colIndex) {
-    // Mousedown event for click-and-drag
-    cell.addEventListener("mousedown", function (event) {
-        event.preventDefault();
-        isMouseDown = true;
-        applyTileToCell(cell, rowIndex, colIndex);
-    });
-
-    // Mouseup event to stop drag
-    cell.addEventListener("mouseup", function () {
-        isMouseDown = false;
-    });
-
-    // Mousemove event to continue placing tiles while dragging
-    cell.addEventListener("mousemove", function () {
-        if (isMouseDown) {
-            applyTileToCell(cell, rowIndex, colIndex);
-        }
-    });
-
-    // Dragover event for allowing drop on cell
-    cell.addEventListener("dragover", function (event) {
-        event.preventDefault();
-    });
-
-    // Drop event to place tile on cell
-    cell.addEventListener("drop", function (event) {
-        event.preventDefault();
-        if (selectedTile) {
-            applyTileToCell(cell, rowIndex, colIndex);
-        }
-    });
-}
-function applyTileToCell(cell, rowIndex, colIndex) {
-    if (!selectedTile) {
-        return;
-    }
-    const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
-    const selectedTileType = selectedTile.name;
-
-    let canReplace = false;
-
-    // Tile replacement rules
-    if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-        canReplace = true;
-    } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
-        canReplace = true;
-    } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
-        canReplace = true;
-    } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-        canReplace = true;
-    } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
-        canReplace = true;
-    } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
-        canReplace = true;
-    } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
-        canReplace = true;
-    }
-
-    // Apply selected tile if replacement is allowed
-    if (canReplace) {
-        cell.querySelector('img').src = selectedTile.src;
-        cell.querySelector('img').alt = selectedTile.name;
-        console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
-    } else {
-        showMessage("Invalid move: Cannot replace this tile!");
-    }
-
-}
-
-
-
-function resetLeaderboard() {
-    localStorage.removeItem("leaderboard");
-    leaderboardList.innerHTML = "";
-    showMainScreenMessage("Leaderboard has been reset.");
-
-}
-resetLeaderboardButton.addEventListener("click", resetLeaderboard);
-
-
+let selectedTile = null;
 let timer = null;
 let startTime;
 let selectedDifficulty = null;
 let playerName = "";
 
+
+
+
+// Timers for game
 function startTimer() {
     startTime = new Date();
     timer = setInterval(function () {
@@ -129,32 +47,6 @@ function startTimer() {
         }
     }, 500);
 }
-function displayWinAnimation(minutes, seconds) {
-    stopTimer();
-    document.querySelector("#overlay").style.display = "block";
-    document.querySelector("#winAnimation").style.display = "block";
-
-    const saveScoreButton = document.querySelector("#saveScoreButton");
-    saveScoreButton.onclick = function () {
-        const playerName = document.querySelector("#playerNameInput").value.trim() || "Player";
-        const time = formatTime(minutes) + ":" + formatTime(seconds);
-
-        const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-        leaderboard.push({ name: playerName, time: time });
-        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-
-        showMainScreenMessage(`Score saved for ${playerName}! Time: ${time}`);
-
-        // Hide the win animation and overlay after saving the score
-        document.querySelector("#winAnimation").style.display = "none";
-        document.querySelector("#overlay").style.display = "none";
-
-        resetEverything();
-    };
-}
-
-
-
 function formatTime(time) {
     return time < 10 ? '0' + time : time;
 }
@@ -167,10 +59,8 @@ function resetTimer() {
     startTimer();
 }
 
-const paletteImageElements = document.querySelectorAll(".palette-image");
 
-let selectedTile = null;
-
+// Game Maps
 const mapData = {
     "bridge": { name: "Bridge", angle: 0, src: "Images/bridge.png" },
     "empty": { name: "Empty Tile", angle: 0, src: "Images/empty.png" },
@@ -181,9 +71,6 @@ const mapData = {
     "mountain_rail": { name: "Mountain Rail", angle: 0, src: "Images/mountain_rail.png" },
     "bridge_rail": { name: "Bridge Rail", angle: 0, src: "Images/bridge_rail.png" }
 };
-
-
-// Layouts
 // Layouts for 5
 const layout_5_1 = [
     [{ type: "empty", angle: 0 }, { type: "mountain", angle: 90 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "oasis", angle: 180 }],
@@ -220,8 +107,6 @@ const layout_5_5 = [
     [{ type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "bridge", angle: 0 }, { type: "oasis", angle: 0 }, { type: "empty", angle: 0 }],
     [{ type: "empty", angle: 0 }, { type: "mountain", angle: 180 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }]
 ];
-
-
 
 // Layouts for 7 
 const layout_7_1 = [
@@ -270,7 +155,6 @@ const layout_7_5 = [
     [{ type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }]
 ];
 
-
 const layouts_5 = [
     layout_5_1,
     layout_5_2,
@@ -287,6 +171,7 @@ const layouts_7 = [
     layout_7_5,
 ];
 
+// Selecting Random Layout
 let bestLayout = null; // it will be setted in when start button is pressed
 
 function getRandomLayout() {
@@ -294,9 +179,8 @@ function getRandomLayout() {
     return bestLayout[randomIndex];
 }
 
-// Error msg to show when wrong tile is going to be placed
+// Error msg boxes for main screen and game screen
 const messageBox = document.querySelector("#messageBox");
-
 function showMessage(message) {
     messageBox.innerText = message;
     messageBox.style.display = "block"; // Show the message box
@@ -306,7 +190,6 @@ function showMessage(message) {
 }
 
 const mainScreenMessageBox = document.querySelector("#main_screen_msg_box");
-
 function showMainScreenMessage(message) {
     mainScreenMessageBox.innerText = message;
     mainScreenMessageBox.style.display = "block"; // Show the message box
@@ -397,10 +280,70 @@ function populateGameBoard(layout) {
         gameBoard.appendChild(row);
     });
 }
+// For mouse drag and drop together with mouse movement.
+let isMouseDown = false;
+function setupDragPlacement(cell, rowIndex, colIndex) {
+    cell.addEventListener("mousedown", function (event) {
+        event.preventDefault();
+        isMouseDown = true;
+        applyTileToCell(cell, rowIndex, colIndex);
+    });
 
-// document.addEventListener("mouseup", function () {
-//     isMouseDown = false;
-// });
+    cell.addEventListener("mouseup", function () {
+        isMouseDown = false;
+    });
+
+    cell.addEventListener("mousemove", function () {
+        if (isMouseDown) {
+            applyTileToCell(cell, rowIndex, colIndex);
+        }
+    });
+
+    cell.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    cell.addEventListener("drop", function (event) {
+        event.preventDefault();
+        if (selectedTile) {
+            applyTileToCell(cell, rowIndex, colIndex);
+        }
+    });
+}
+function applyTileToCell(cell, rowIndex, colIndex) {
+    if (!selectedTile) {
+        return;
+    }
+    const currentTileType = getCurrentBoardLayout()[rowIndex][colIndex].type;
+    const selectedTileType = selectedTile.name;
+
+    let canReplace = false;
+
+    if (currentTileType === "empty" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+        canReplace = true;
+    } else if (currentTileType === "bridge" && selectedTileType === "bridge_rail") {
+        canReplace = true;
+    } else if (currentTileType === "mountain" && selectedTileType === "mountain_rail") {
+        canReplace = true;
+    } else if (currentTileType === "straight_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+        canReplace = true;
+    } else if (currentTileType === "curve_rail" && (selectedTileType === "straight_rail" || selectedTileType === "curve_rail")) {
+        canReplace = true;
+    } else if (currentTileType === "mountain_rail" && selectedTileType === "mountain_rail") {
+        canReplace = true;
+    } else if (currentTileType === "bridge_rail" && selectedTileType === "bridge_rail") {
+        canReplace = true;
+    }
+
+    if (canReplace) {
+        cell.querySelector('img').src = selectedTile.src;
+        cell.querySelector('img').alt = selectedTile.name;
+        console.log(`Tile applied at (${rowIndex}, ${colIndex})`);
+    } else {
+        showMessage("Invalid move: Cannot replace this tile!");
+    }
+
+}
 
 //Function to delete tile and get old tile
 function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
@@ -416,14 +359,7 @@ function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
     }
 }
 
-// Function to rotate tile
-
-// function rotateTile(imgElement, tile) {
-//     tile.angle = (tile.angle + 90) % 360; // Increment the angle by 90 degrees and ensure it wraps around at 360 degrees
-//     imgElement.style.transform = `rotate(${tile.angle}deg)`; // Apply the new rotation
-// }
-
-// Function to get layer of board present condition
+// Function to get layer of board present condition for debugging and other purposes
 function getCurrentBoardLayout() {
     const gameBoard = document.querySelector("#gameBoard");
 
@@ -457,8 +393,6 @@ function getCurrentBoardLayout() {
     return currentLayout;
 }
 
-
-
 // printing board layout to check or for check purposes or debugging
 function printCurrentBoardLayout() {
     const layout = getCurrentBoardLayout();
@@ -466,7 +400,7 @@ function printCurrentBoardLayout() {
     console.log(layout);
 }
 
-// To check ans whether ans is right or not or layouts are equal or not
+// To check ans whether ans is right or not or layouts are equal or not for checking
 function layoutsAreEqual(layout1, layout2) {
     if (layout1.length !== layout2.length) return false;
     for (let i = 0; i < layout1.length; i++) {
@@ -510,7 +444,6 @@ const railProperties = {
         90: ["left", "right"]
     }
 };
-
 // to check whether all the entries in board is completed or not
 function isCompleteBoard(boardLayout) {
     for (let rowIndex = 0; rowIndex < boardLayout.length; rowIndex++) {
@@ -621,7 +554,6 @@ function checkWinCondition(boardLayout) {
     return winCondition;
 }
 
-
 // function that will reset the board to its initial state 
 function resetBoard() {
     populateGameBoard(originalLayout);
@@ -629,7 +561,6 @@ function resetBoard() {
 }
 
 // making reset button
-
 if (resetButton) {
     resetButton.addEventListener("click", resetBoard);
 }
@@ -638,29 +569,22 @@ if (resetButton) {
 function resetEverything() {
     container_menu.hidden = false;
     game_start.hidden = true;
-    // gameActive = false;
     selectedTile = null;
     selectedDifficulty = null;
     bestLayout = null;
-
-    // Clear UI selections and inputs
     playerNameInput.value = "";
     insideName.textContent = "Player";
     timerDisplay.textContent = "00:00";
 
-    // Reset difficulty button styles
     easyButton.classList.remove("selected");
     hardButton.classList.remove("selected");
 
-    // Stop and reset the timer
     stopTimer();
 
-    // Clear saved data in localStorage
     localStorage.removeItem("savedGameState");
     localStorage.removeItem("originalLayout");
     localStorage.removeItem("playerName");
 
-    // Reset the board layout to original or initial state
     if (originalLayout) {
         populateGameBoard(originalLayout);
     } else {
@@ -671,34 +595,23 @@ function resetEverything() {
 }
 
 
-// to populating palette images or to debug
 const paletteImages = document.querySelectorAll(".palette-image");
 
 paletteImages.forEach((img) => {
-    // Initialize click count for each palette image
+    // Using click count so that rotate the image accordinlgy, once or twice, like when first we click don't rotate it's just placed there and on second click it wil rotate
     img.setAttribute("data-click-count", 0);
-
-    // Make the palette images draggable
     img.draggable = true;
-
-    // Click event to select and count clicks on the tile
     img.addEventListener("click", function () {
-        // Increment the click count
+
         let clickCount = parseInt(img.getAttribute("data-click-count"));
         img.setAttribute("data-click-count", clickCount + 1);
 
-        // Set the selected tile based on the clicked image
         selectedTile = {
             src: img.src,
             name: img.alt.includes("rail") ? img.alt : "",
-            angle: 0 // Reset angle for new selections
+            angle: 0 
         };
-
-        console.log("Selected tile:", selectedTile);
-        console.log(`Tile ${img.alt} clicked ${clickCount + 1} times.`);
     });
-
-    // Dragstart event to set the selected tile when dragging
     img.addEventListener("dragstart", function (event) {
         selectedTile = {
             src: img.src,
@@ -709,8 +622,129 @@ paletteImages.forEach((img) => {
     });
 });
 
+// Win Animation
+function displayWinAnimation(minutes, seconds) {
+    stopTimer();
+    document.querySelector("#overlay").style.display = "block";
+    document.querySelector("#winAnimation").style.display = "block";
 
-// Buttons and their workings
+    const saveScoreButton = document.querySelector("#saveScoreButton");
+    saveScoreButton.onclick = function () {
+        const playerName = document.querySelector("#playerNameInput").value.trim() || "Player";
+        const time = formatTime(minutes) + ":" + formatTime(seconds);
+
+        const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+        leaderboard.push({ name: playerName, time: time });
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+        showMainScreenMessage(`Score saved for ${playerName}! Time: ${time}`);
+
+        // Hide the win animation and overlay after saving the score
+        document.querySelector("#winAnimation").style.display = "none";
+        document.querySelector("#overlay").style.display = "none";
+
+        resetEverything();
+    };
+}
+
+// LeaderBoard
+function resetLeaderboard() {
+    localStorage.removeItem("leaderboard");
+    leaderboardList.innerHTML = "";
+    showMainScreenMessage("Leaderboard has been reset.");    
+}
+function displayLeaderboard() {
+    leaderboardList.innerHTML = "";
+
+    const scores = JSON.parse(localStorage.getItem("leaderboard")) || [];
+    scores.sort((a, b) => {
+        const [aMinutes, aSeconds] = a.time.split(":").map(Number);
+        const [bMinutes, bSeconds] = b.time.split(":").map(Number);
+        return aMinutes * 60 + aSeconds - (bMinutes * 60 + bSeconds);
+    });
+    scores.forEach((score, index) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${index + 1}. ${score.name} - ${score.time}`;
+        leaderboardList.appendChild(listItem);
+    });
+}
+
+// Saving Game State
+function saveGameState() {
+    const gameState = {
+        playerName: playerNameInput.value.trim(),
+        selectedDifficulty: selectedDifficulty,
+        timer: timerDisplay.textContent,
+        boardLayout: getCurrentBoardLayout()
+    };
+    localStorage.setItem("savedGameState", JSON.stringify(gameState));
+    showMessage("Game has been successfully saved!");
+
+}
+function restoreGameState() {
+    const savedState = JSON.parse(localStorage.getItem("savedGameState"));
+    const savedOriginalLayout = JSON.parse(localStorage.getItem("originalLayout"));
+    if (savedOriginalLayout) {
+        originalLayout = savedOriginalLayout;
+        console.log("Restored original layout from localStorage:", originalLayout);
+    } else {
+        console.log("No original layout found in localStorage.");
+    }
+
+    if (savedState) {
+        playerNameInput.value = savedState.playerName;
+        insideName.textContent = savedState.playerName || "Player";
+
+        selectedDifficulty = savedState.selectedDifficulty;
+        timerDisplay.textContent = savedState.timer;
+
+        initialLayout = savedState.boardLayout;
+        console.log("Restoring board layout:", initialLayout);
+
+        if (selectedDifficulty === "5x5") {
+            easyButton.classList.add("selected");
+            hardButton.classList.remove("selected");
+            bestLayout = layouts_5;
+        } else if (selectedDifficulty === "7x7") {
+            hardButton.classList.add("selected");
+            easyButton.classList.remove("selected");
+            bestLayout = layouts_7;
+        }
+
+        container_menu.hidden = true;
+        game_start.hidden = false;
+
+        populateGameBoard(initialLayout);
+
+        resumeTimerFromSaved(savedState.timer);
+        console.log("Game state restored:", savedState);
+    } else {
+        console.log("No saved game state found.");
+    }
+}
+function resumeTimerFromSaved(savedTime) {
+    const [minutes, seconds] = savedTime.split(":").map(Number);
+    const savedElapsedMs = (minutes * 60 + seconds) * 1000;
+    startTime = new Date(new Date() - savedElapsedMs);
+
+    timer = setInterval(function () {
+        const elapsedTime = new Date() - startTime;
+        const currentSeconds = Math.floor((elapsedTime / 1000) % 60);
+        const currentMinutes = Math.floor((elapsedTime / 1000 / 60) % 60);
+        timerDisplay.textContent = formatTime(currentMinutes) + ':' + formatTime(currentSeconds);
+
+        if (checkWinCondition(getCurrentBoardLayout())) {
+            stopTimer();
+            displayWinAnimation(currentMinutes, currentSeconds);
+        }
+    }, 500);
+}
+saveGameButton.addEventListener("click", saveGameState);
+
+restoreGameState();
+
+
+// Buttons and UI and their workings
 rules_btn.addEventListener("click", function () {
     container_menu.hidden = true;
     instructions.hidden = false;
@@ -779,21 +813,7 @@ backgame_btn.addEventListener("click", () => {
     resetEverything();
 })
 
-function displayLeaderboard() {
-    leaderboardList.innerHTML = "";
-
-    const scores = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    scores.sort((a, b) => {
-        const [aMinutes, aSeconds] = a.time.split(":").map(Number);
-        const [bMinutes, bSeconds] = b.time.split(":").map(Number);
-        return aMinutes * 60 + aSeconds - (bMinutes * 60 + bSeconds);
-    });
-    scores.forEach((score, index) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${index + 1}. ${score.name} - ${score.time}`;
-        leaderboardList.appendChild(listItem);
-    });
-}
+resetLeaderboardButton.addEventListener("click", resetLeaderboard);
 
 showLeaderboardButton.addEventListener("click", function () {
     displayLeaderboard();
@@ -803,97 +823,4 @@ showLeaderboardButton.addEventListener("click", function () {
 closeLeaderboardButton.addEventListener("click", function () {
     leaderboardContainer.hidden = true;
 });
-
-
-
-
-
-// Doing bonus points
-function saveGameState() {
-    const gameState = {
-        playerName: playerNameInput.value.trim(),
-        selectedDifficulty: selectedDifficulty,
-        timer: timerDisplay.textContent,
-        boardLayout: getCurrentBoardLayout()
-    };
-    localStorage.setItem("savedGameState", JSON.stringify(gameState));
-    showMessage("Game has been successfully saved!");
-
-}
-
-
-
-// Function to restore the game state
-function restoreGameState() {
-    const savedState = JSON.parse(localStorage.getItem("savedGameState"));
-    const savedOriginalLayout = JSON.parse(localStorage.getItem("originalLayout"));
-    if (savedOriginalLayout) {
-        originalLayout = savedOriginalLayout;
-        console.log("Restored original layout from localStorage:", originalLayout);
-    } else {
-        console.log("No original layout found in localStorage.");
-    }
-
-    if (savedState) {
-        // Set player name and display it
-        playerNameInput.value = savedState.playerName;
-        insideName.textContent = savedState.playerName || "Player";
-
-        // Restore difficulty selection
-        selectedDifficulty = savedState.selectedDifficulty;
-        timerDisplay.textContent = savedState.timer;
-
-        // Set initial layout from saved data
-        initialLayout = savedState.boardLayout;
-        console.log("Restoring board layout:", initialLayout);
-
-        // Restore difficulty button selection
-        if (selectedDifficulty === "5x5") {
-            easyButton.classList.add("selected");
-            hardButton.classList.remove("selected");
-            bestLayout = layouts_5;
-        } else if (selectedDifficulty === "7x7") {
-            hardButton.classList.add("selected");
-            easyButton.classList.remove("selected");
-            bestLayout = layouts_7;
-        }
-
-        // Set up game view
-        container_menu.hidden = true;
-        game_start.hidden = false;
-
-        // Populate the game board with the full layout
-        populateGameBoard(initialLayout);
-
-        // Start the timer from saved time
-        resumeTimerFromSaved(savedState.timer);
-        console.log("Game state restored:", savedState);
-    } else {
-        console.log("No saved game state found.");
-    }
-}
-
-// Function to start/resume the timer from saved time
-function resumeTimerFromSaved(savedTime) {
-    const [minutes, seconds] = savedTime.split(":").map(Number);
-    const savedElapsedMs = (minutes * 60 + seconds) * 1000;
-    startTime = new Date(new Date() - savedElapsedMs);
-
-    // Resume the timer from the saved point
-    timer = setInterval(function () {
-        const elapsedTime = new Date() - startTime;
-        const currentSeconds = Math.floor((elapsedTime / 1000) % 60);
-        const currentMinutes = Math.floor((elapsedTime / 1000 / 60) % 60);
-        timerDisplay.textContent = formatTime(currentMinutes) + ':' + formatTime(currentSeconds);
-
-        if (checkWinCondition(getCurrentBoardLayout())) {
-            stopTimer();
-            displayWinAnimation(currentMinutes, currentSeconds);
-        }
-    }, 500);
-}
-saveGameButton.addEventListener("click", saveGameState);
-
-restoreGameState();
-
 
