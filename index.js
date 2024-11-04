@@ -550,7 +550,7 @@ function checkWinCondition(boardLayout) {
     const railsConnected = areRailsConnected(boardLayout);
     console.log("Rails Connected Check:", railsConnected);
 
-    const winCondition = completeBoard && railsConnected;
+    const winCondition =completeBoard && railsConnected;
     console.log("Win Condition:", winCondition);
     return winCondition;
 }
@@ -594,7 +594,6 @@ function resetEverything() {
 
     console.log("Game has been reset.");
 }
-
 
 const paletteImages = document.querySelectorAll(".palette-image");
 let currentPaletteIndex = 0; 
@@ -654,7 +653,7 @@ document.addEventListener("keydown", (event) => {
     updateActivePalette(currentPaletteIndex); 
 });
 
-// Win Animation
+// Win Animation and saving scores and other thigns
 function displayWinAnimation(minutes, seconds) {
     stopTimer();
     document.querySelector("#overlay").style.display = "block";
@@ -666,39 +665,79 @@ function displayWinAnimation(minutes, seconds) {
         const time = formatTime(minutes) + ":" + formatTime(seconds);
 
         const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-        leaderboard.push({ name: playerName, time: time });
+
+        leaderboard.push({ name: playerName, time: time, difficulty: selectedDifficulty });
         localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 
         showMainScreenMessage(`Score saved for ${playerName}! Time: ${time}`);
 
-        // Hide the win animation and overlay after saving the score
         document.querySelector("#winAnimation").style.display = "none";
         document.querySelector("#overlay").style.display = "none";
 
         resetEverything();
     };
 }
-
 // LeaderBoard
 function resetLeaderboard() {
     localStorage.removeItem("leaderboard");
     leaderboardList.innerHTML = "";
-    showMainScreenMessage("Leaderboard has been reset.");    
+    showMainScreenMessage("Leaderboard has been reset.");
 }
+
 function displayLeaderboard() {
-    leaderboardList.innerHTML = "";
+    leaderboardList.innerHTML = ""; 
 
     const scores = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    scores.sort((a, b) => {
+
+    const groupedScores = {
+        "5x5": [],
+        "7x7": []
+    };
+
+    scores.forEach(score => {
+        if (score.difficulty === "5x5") groupedScores["5x5"].push(score);
+        else if (score.difficulty === "7x7") groupedScores["7x7"].push(score);
+    });
+
+    groupedScores["5x5"].sort((a, b) => {
         const [aMinutes, aSeconds] = a.time.split(":").map(Number);
         const [bMinutes, bSeconds] = b.time.split(":").map(Number);
-        return aMinutes * 60 + aSeconds - (bMinutes * 60 + bSeconds);
+        return aMinutes * 60 + aSeconds - (bMinutes * 60 + bSeconds); 
     });
-    scores.forEach((score, index) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${index + 1}. ${score.name} - ${score.time}`;
-        leaderboardList.appendChild(listItem);
+
+    groupedScores["7x7"].sort((a, b) => {
+        const [aMinutes, aSeconds] = a.time.split(":").map(Number);
+        const [bMinutes, bSeconds] = b.time.split(":").map(Number);
+        return (bMinutes * 60 + bSeconds) - (aMinutes * 60 + aSeconds);
     });
+
+    function createTableForDifficulty(difficulty, scores) {
+        const tableContainer = document.createElement("div");
+        const title = document.createElement("h3");
+        title.textContent = `${difficulty} Difficulty Leaderboard`;
+        tableContainer.appendChild(title);
+
+        const table = document.createElement("table");
+        table.classList.add("leaderboard-table");
+
+        const headerRow = table.insertRow();
+        headerRow.innerHTML = "<th>Rank</th><th>Name</th><th>Time</th>";
+
+        scores.forEach((score, index) => {
+            const row = table.insertRow();
+            row.innerHTML = `<td>${index + 1}</td><td>${score.name}</td><td>${score.time}</td>`;
+        });
+
+        tableContainer.appendChild(table);
+        leaderboardList.appendChild(tableContainer);
+    }
+
+    if (groupedScores["5x5"].length > 0) {
+        createTableForDifficulty("5x5", groupedScores["5x5"]);
+    }
+    if (groupedScores["7x7"].length > 0) {
+        createTableForDifficulty("7x7", groupedScores["7x7"]);
+    }
 }
 
 // Saving Game State
