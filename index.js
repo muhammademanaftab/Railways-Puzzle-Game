@@ -29,7 +29,7 @@ let playerName = "";
 
 
 
-// Timers for game
+// Timers for game, timer start krne ke liay....
 function startTimer() {
     startTime = new Date();
     timer = setInterval(function () {
@@ -38,7 +38,6 @@ function startTimer() {
         const minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
         timerDisplay.textContent = formatTime(minutes) + ':' + formatTime(seconds);
 
-        // Check if the game is complete each second
         const isWin = checkWinCondition(getCurrentBoardLayout());
         console.log("Win Condition Check:", isWin);
         if (isWin) {
@@ -47,12 +46,16 @@ function startTimer() {
         }
     }, 500);
 }
+
+// Time ko format krnaa
 function formatTime(time) {
     return time < 10 ? '0' + time : time;
 }
+// Stop timer, jo ke time ko stop krega
 function stopTimer() {
     clearInterval(timer);
 }
+// Reset timer jo ke time ko reset krega jeetnay pr
 function resetTimer() {
     stopTimer();
     timerDisplay.textContent = "00:00";
@@ -60,7 +63,7 @@ function resetTimer() {
 }
 
 
-// Game Maps
+// Game Maps Data
 const mapData = {
     "bridge": { name: "Bridge", angle: 0, src: "Images/bridge.png" },
     "empty": { name: "Empty Tile", angle: 0, src: "Images/empty.png" },
@@ -154,7 +157,7 @@ const layout_7_5 = [
     [{ type: "empty", angle: 0 }, { type: "mountain", angle: 180 }, { type: "empty", angle: 0 }, { type: "bridge", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }],
     [{ type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }, { type: "empty", angle: 0 }]
 ];
-
+// All 5 layeouts
 const layouts_5 = [
     layout_5_1,
     layout_5_2,
@@ -162,7 +165,7 @@ const layouts_5 = [
     layout_5_4,
     layout_5_5,
 ];
-
+// All 7 layouts
 const layouts_7 = [
     layout_7_1,
     layout_7_2,
@@ -171,34 +174,32 @@ const layouts_7 = [
     layout_7_5,
 ];
 
-// Selecting Random Layout
-let bestLayout = null; // it will be setted in when start button is pressed
-
+let bestLayout = null; 
+// Random Layout nikalnay ke liay.
 function getRandomLayout() {
     const randomIndex = Math.floor(Math.random() * 5);
     return bestLayout[randomIndex];
 }
-
-// Error msg boxes for main screen and game screen
+// Message box jo ke game ke doran msg dega
 const messageBox = document.querySelector("#messageBox");
 function showMessage(message) {
     messageBox.innerText = message;
-    messageBox.style.display = "block"; // Show the message box
+    messageBox.style.display = "block";
     setTimeout(() => {
-        messageBox.style.display = "none"; // Hide the message box after 3 seconds
+        messageBox.style.display = "none"; 
     }, 3000);
 }
 
+// Msg box jo main screen pr errors ya msgs dega
 const mainScreenMessageBox = document.querySelector("#main_screen_msg_box");
 function showMainScreenMessage(message) {
     mainScreenMessageBox.innerText = message;
-    mainScreenMessageBox.style.display = "block"; // Show the message box
+    mainScreenMessageBox.style.display = "block"; 
     setTimeout(() => {
-        mainScreenMessageBox.style.display = "none"; // Hide the message box after a few seconds
+        mainScreenMessageBox.style.display = "none"; 
     }, 3000);
 }
-
-// function that populates the board and rotate and remove the tile by clicking on right button
+// Main function haa jo ke board ko populate kraygaa, right click pr delete or left pr rotate krayga.
 function populateGameBoard(layout) {
     const gameBoard = document.querySelector("#gameBoard");
 
@@ -217,20 +218,16 @@ function populateGameBoard(layout) {
             row.appendChild(cell);
 
 
-            // Right-click event to restore tile to initial state if modified
             imgElement.addEventListener('contextmenu', function (event) {
-                event.preventDefault(); // Prevent default context menu
+                event.preventDefault(); 
                 restoreTileIfDifferent(rowIndex, colIndex, imgElement);
             });
 
-            // Left-click event to change the tile based on selected tile
             imgElement.addEventListener('click', function (event) {
-                // Initialize click count if not already set
                 if (!imgElement.hasAttribute("data-click-count")) {
                     imgElement.setAttribute("data-click-count", 0);
                 }
 
-                // Get the current click count
                 let clickCount = parseInt(imgElement.getAttribute("data-click-count"));
 
                 if (clickCount === 0) {
@@ -311,6 +308,7 @@ function setupDragPlacement(cell, rowIndex, colIndex) {
         }
     });
 }
+// Mouse Drag drop ko implement krne liay, helper function.
 function applyTileToCell(cell, rowIndex, colIndex) {
     if (!selectedTile) {
         return;
@@ -346,10 +344,10 @@ function applyTileToCell(cell, rowIndex, colIndex) {
 
 }
 
-//Function to delete tile and get old tile
+//Function to delete tile and get old tile , jo ke populate board main use hoga.
 function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
     const currentTile = getCurrentBoardLayout()[rowIndex][colIndex];
-    const originalTile = originalLayout[rowIndex][colIndex]; // Use originalLayout here
+    const originalTile = originalLayout[rowIndex][colIndex]; 
 
     if (currentTile.type !== originalTile.type || currentTile.angle !== originalTile.angle) {
         const tileData = mapData[originalTile.type];
@@ -360,7 +358,7 @@ function restoreTileIfDifferent(rowIndex, colIndex, imgElement) {
     }
 }
 
-// Function to get layer of board present condition for debugging and other purposes
+// Function to get layer of board present condition for debugging and other purposes, jo ke board layout extratc krega
 function getCurrentBoardLayout() {
     const gameBoard = document.querySelector("#gameBoard");
 
@@ -371,12 +369,11 @@ function getCurrentBoardLayout() {
         return Array.from(cells).map(cell => {
             const img = cell.querySelector('img');
             if (img) {
-                // Attempt to determine the type based on the img's alt attribute
                 const type = img.alt.includes("rail") ? img.alt : Object.keys(mapData).find(key => mapData[key].name === img.alt) || "empty";
                 const angleMatch = img.style.transform.match(/rotate\((\d+)deg\)/);
                 const angle = angleMatch ? parseInt(angleMatch[1], 10) % 360 : 0;
 
-                // Debugging output to inspect each cell's properties
+                // Debugging output to inspect each cell's properties, debyug log ha yeh
                 // console.log("Checking Cell:", cell);
                 // console.log("Image Source:", img.src);
                 // console.log("Image Alt (Type):", img.alt);
@@ -385,16 +382,16 @@ function getCurrentBoardLayout() {
 
                 return { type: type, angle: angle };
             } else {
-                return { type: "empty", angle: 0 }; // Default for empty cells
+                return { type: "empty", angle: 0 }; 
             }
         });
     });
 
-    console.log("Current Board Layout:", currentLayout); // Full layout debugging output
+    console.log("Current Board Layout:", currentLayout); 
     return currentLayout;
 }
 
-// printing board layout to check or for check purposes or debugging
+// printing board layout to check or for check purposes or debugging, to check purposes.
 function printCurrentBoardLayout() {
     const layout = getCurrentBoardLayout();
     console.log("Current Board Layout:");
@@ -417,8 +414,7 @@ function layoutsAreEqual(layout1, layout2) {
 }
 
 
-// To check win condition or whether the map is completed or not
-// Defining rail properties like checking entries
+// To check win condition or whether the map is completed or not, a data strcuture for checking
 const railProperties = {
     straight_rail: {
         0: ["top", "bottom"],
@@ -457,10 +453,10 @@ function isCompleteBoard(boardLayout) {
         }
     }
     console.log("All non-oasis tiles are correctly replaced by rails.");
-    return true; // All non-oasis tiles are rails
+    return true; 
 }
 
-// to check rails are connected
+// to check rails are connected, connection check krne wala function
 function areRailsConnected(boardLayout) {
     const rows = boardLayout.length;
     const cols = boardLayout[0].length;
@@ -469,9 +465,8 @@ function areRailsConnected(boardLayout) {
         for (let j = 0; j < cols; j++) {
             const tile = boardLayout[i][j];
 
-            if (!tile.type.includes("rail")) continue; // Skip non-rail tiles
+            if (!tile.type.includes("rail")) continue; 
 
-            // Check if tile type and angle exist in railProperties
             if (!railProperties[tile.type] || !railProperties[tile.type][tile.angle]) {
                 console.error(`No connection data for tile at (${i}, ${j}) with type: ${tile.type} and angle: ${tile.angle}`);
                 continue;
@@ -481,7 +476,6 @@ function areRailsConnected(boardLayout) {
             console.log(`Checking connections for rail at (${i}, ${j}) with type: ${tile.type} and angle: ${tile.angle}`);
             console.log(`Current tile connections: ${connections.join(', ')}`);
 
-            // Check top connection
             if (connections.includes("top") && i > 0) {
                 const topTile = boardLayout[i - 1][j];
                 if (topTile && railProperties[topTile.type] && railProperties[topTile.type][topTile.angle]) {
@@ -495,7 +489,6 @@ function areRailsConnected(boardLayout) {
                 }
             }
 
-            // Check bottom connection
             if (connections.includes("bottom") && i < rows - 1) {
                 const bottomTile = boardLayout[i + 1][j];
                 if (bottomTile && railProperties[bottomTile.type] && railProperties[bottomTile.type][bottomTile.angle]) {
@@ -509,7 +502,6 @@ function areRailsConnected(boardLayout) {
                 }
             }
 
-            // Check left connection
             if (connections.includes("left") && j > 0) {
                 const leftTile = boardLayout[i][j - 1];
                 if (leftTile && railProperties[leftTile.type] && railProperties[leftTile.type][leftTile.angle]) {
@@ -523,7 +515,6 @@ function areRailsConnected(boardLayout) {
                 }
             }
 
-            // Check right connection
             if (connections.includes("right") && j < cols - 1) {
                 const rightTile = boardLayout[i][j + 1];
                 if (rightTile && railProperties[rightTile.type] && railProperties[rightTile.type][rightTile.angle]) {
@@ -539,10 +530,10 @@ function areRailsConnected(boardLayout) {
         }
     }
     console.log("All rails are correctly connected.");
-    return true; // All rail segments are correctly connected
+    return true; 
 }
 
-// checking both rails and tiles
+// checking both rails and tiles conditions overall map checker or win checker
 function checkWinCondition(boardLayout) {
     const completeBoard = isCompleteBoard(boardLayout);
     console.log("Complete Board Check:", completeBoard);
@@ -555,18 +546,18 @@ function checkWinCondition(boardLayout) {
     return winCondition;
 }
 
-// function that will reset the board to its initial state 
+// function that will reset the board to its initial state, that reset my board, board ko reset krega
 function resetBoard() {
     populateGameBoard(originalLayout);
     showMessage("Board has been reset.")
 }
 
-// making reset button
+// making reset button, board reset krne wala button
 if (resetButton) {
     resetButton.addEventListener("click", resetBoard);
 }
 
-//function to reset everything
+//function to reset everything,  sab kuch reset krdega, sabko initial halat main lanay wala button
 function resetEverything() {
     container_menu.hidden = false;
     game_start.hidden = true;
@@ -597,7 +588,7 @@ function resetEverything() {
 
 const paletteImages = document.querySelectorAll(".palette-image");
 let currentPaletteIndex = 0; 
-// function for using arrow keys for selection of palettes 
+// function for using arrow keys for selection of palettes, bonus point ha yeh
 
 function updateActivePalette(index) {
     paletteImages.forEach((img) => img.classList.remove("active-palette"));
@@ -613,6 +604,7 @@ function updateActivePalette(index) {
 }
 updateActivePalette(currentPaletteIndex);
 
+// function to handle arrow key presses, arrow keys ka use karna hai, yeh function ka
 paletteImages.forEach((img, index) => {
     img.setAttribute("data-click-count", 0);
     img.draggable = true;
@@ -634,6 +626,7 @@ paletteImages.forEach((img, index) => {
     });
 });
 
+// function to handle arrow events, aroow keys ka use karna hai, yeh function os liay ha
 document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowDown") {
         currentPaletteIndex = (currentPaletteIndex + 1) % paletteImages.length;
@@ -677,13 +670,14 @@ function displayWinAnimation(minutes, seconds) {
         resetEverything();
     };
 }
-// LeaderBoard
+// LeaderBoard, and its functions
 function resetLeaderboard() {
     localStorage.removeItem("leaderboard");
     leaderboardList.innerHTML = "";
     showMainScreenMessage("Leaderboard has been reset.");
 }
 
+// fucntion jo leaderboard ko show kryga
 function displayLeaderboard() {
     leaderboardList.innerHTML = ""; 
 
@@ -752,6 +746,7 @@ function saveGameState() {
     showMessage("Game has been successfully saved!");
 
 }
+// game state restorr krega
 function restoreGameState() {
     const savedState = JSON.parse(localStorage.getItem("savedGameState"));
     const savedOriginalLayout = JSON.parse(localStorage.getItem("originalLayout"));
@@ -793,6 +788,8 @@ function restoreGameState() {
         console.log("No saved game state found.");
     }
 }
+
+// Game state ka timer resume krega refresh hone pr
 function resumeTimerFromSaved(savedTime) {
     const [minutes, seconds] = savedTime.split(":").map(Number);
     const savedElapsedMs = (minutes * 60 + seconds) * 1000;
@@ -815,7 +812,7 @@ saveGameButton.addEventListener("click", saveGameState);
 restoreGameState();
 
 
-// Buttons and UI and their workings
+// Buttons and their workings
 rules_btn.addEventListener("click", function () {
     container_menu.hidden = true;
     instructions.hidden = false;
@@ -861,7 +858,6 @@ start_btn.addEventListener("click", function () {
         return;
     }
 
-    // gameActive = true;
     if (selectedDifficulty === "5x5") {
         bestLayout = layouts_5;
     } else {

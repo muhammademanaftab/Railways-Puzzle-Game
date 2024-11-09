@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <!-- Main Game ka scetion ha -->
     <div class="container-menu">
         <div id="main_screen_msg_box"></div>            
         <h1 class="title triple-cut-text">RAILWAYS</h1>
@@ -35,7 +36,7 @@
         </div>
         <div class="railroad"></div>
     </div>
-
+    <!-- Game rules section ha -->
     <div class="instructions" hidden>
         <div id="instructions">
             <button class="back-btn">
@@ -71,14 +72,13 @@
             </li>
         </ul>
     </div>
-
-
+    <!-- Game khelne wala section ha -->
     <div class="start_game" hidden>
         <div class="game-section">
             <div class="game-sidebar">
                 <button class="backgame-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="mx-3 bi bi-arrow-left" viewBox="0 0 16 16">
+                        class="mx-3     bi bi-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                             d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                     </svg>
@@ -133,18 +133,16 @@
             
         </div>
     </div>
-
-
+    <!-- Wining animationa wala section ha -->
     <div id="overlay"></div>    
     <div id="winAnimation" class="win-animation">
         <h2>🎉 Congratulations! You've won the game! 🎉</h2>
         <button id="saveScoreButton" class="save-button">Save</button>
     </div>
-    
-
+    <!-- Leaderboard wala section ha -->
     <div class="leaderboard-container" id="leaderboard" hidden>
         <h2>Leaderboard</h2>
-        <div id="leaderboardList"></div> <!-- Changed from ul to div -->
+        <div id="leaderboardList"></div> 
         <button class="close-btn" id="closeLeaderboard">Close</button>
         <button id="resetLeaderboard" class="close-btn">Reset Leaderboard</button>
     </div>
