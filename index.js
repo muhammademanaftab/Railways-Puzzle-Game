@@ -667,9 +667,19 @@ function displayWinAnimation(minutes, seconds) {
         document.querySelector("#winAnimation").style.display = "none";
         document.querySelector("#overlay").style.display = "none";
 
+        const leaderboardContainer = document.querySelector("#leaderboard");
+        leaderboardContainer.hidden = false;
+
+        displayLeaderboard();
+
+        setTimeout(() => {
+            leaderboardContainer.hidden = true;
+        }, 5000);
+        
         resetEverything();
     };
 }
+
 // LeaderBoard, and its functions
 function resetLeaderboard() {
     localStorage.removeItem("leaderboard");
