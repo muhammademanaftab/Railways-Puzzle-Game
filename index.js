@@ -538,10 +538,10 @@ function checkWinCondition(boardLayout) {
     const completeBoard = isCompleteBoard(boardLayout);
     console.log("Complete Board Check:", completeBoard);
 
-    const railsConnected = areRailsConnected(boardLayout);
+    const railsConnected = completeBoard && areRailsConnected(boardLayout);
     console.log("Rails Connected Check:", railsConnected);
 
-    const winCondition =completeBoard && railsConnected;
+    const winCondition = railsConnected;
     console.log("Win Condition:", winCondition);
     return winCondition;
 }
@@ -675,7 +675,7 @@ function displayWinAnimation(minutes, seconds) {
         setTimeout(() => {
             leaderboardContainer.hidden = true;
         }, 5000);
-        
+
         resetEverything();
     };
 }
