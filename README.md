@@ -1,35 +1,93 @@
-<Muhammad Eman Aftab>
-<IJE4R1>
-Web Programming - Assessment
-This solution was submitted and created by the student mentioned above for the Web Programming course assessment.
-I declare that this solution is my own work. I have not copied or used solutions from third parties.
-I have not forwarded my solution to fellow students, and I have not made it public.
-The Student Requirements System of Eötvös Loránd University
-(ELTE Organizational and Operational Regulations, Vol. II, §74/C) states that as long as a student presents
-the work of another student - or at least a significant part of it - as their own, it is considered a disciplinary offense.
-The most severe consequence of such an offense is the student's expulsion from the university.
+# The Kingdom's Railway Network
 
-Minimum requirements (8 points)
+## Description
 
-  - [X] Mandatory: The readme file provided in the initial submission is properly filled out (Declaration, completed points) (0 points)
-  - [X] Mandatory: The game was created using an HTML file without using any frameworks. (0 points)
-  - [X] Mandatory: The solution completely avoids the practices mentioned in the 'bad practice' section. (0 points)
-  - [X] Menu: The main menu displays the necessary elements: a name input field, a difficulty selection option, and a start button (1 poiX] Menu: Clicking the Start button takes us to the game screen. (1 point)
-  - [X] Menu: The game rules can be accessed from the menu. (1 point)
-  - [X] Game screen: The player's name is displayed on the game screen, and the timer starts (1 point)
-  - [X] Game screen: A randomly selected map corresponding to the chosen difficulty is displayed on the game screen, along with all the necessary elements (3 points)
-  - [X] Placement: I can place different types of elements on the cells of the map (2 points).
+**The Kingdom's Railway Network** is a JavaScript-based puzzle game where players assist Trickles, the royal advisor, in designing a circular railway that traverses every accessible part of Seeknotland. The objective is to create a continuous looped railway line on a square grid map, adhering to specific terrain constraints and rules.
 
-Basic tasks (12 points)
+## Features
 
-  - [X] Placement: Elements can be placed according to the rules. (On a bridge, only straight; on a mountain, only at 90°; nothing can be placed on an oasis; any element can be placed on an empty cell) (4 points)
-  - [X] Validation: The game checks whether the puzzle is solved. That is: each cell that can be touched is only touched once; the path is continuous; all cells are accessible from the neighboring cells; and the correct elements are present everywhere (4 points)
-  - [X] End of game: At the end of the game, the time taken to complete the puzzle is displayed. (1 point)
-  - [X] Leaderboard: At the end of the game, a leaderboard is displayed, showing how long it took for different players to complete the puzzle at the given difficulty level (2 points)
-  - [X] Other: A neat design and well-organized code (1 point)
+- **Main Menu:**
+  - Player name input.
+  - Difficulty selection: Easy (5x5 grid) or Hard (7x7 grid).
+  - Access to game instructions.
+  - Leaderboard displaying fastest completion times.
 
-Bonus tasks (5 points)
+- **Gameplay:**
+  - Square grid map with various terrain tiles:
+    - **Empty Tiles:** Railway can continue in any direction.
+    - **Bridges:** Railway can only be built straight as defined by the bridge.
+    - **Mountains:** Railway can only turn 90° due to rocks blocking two adjacent exits.
+    - **Oases:** Railway cannot be built on these tiles.
+  - Placement of railway elements with user-friendly controls.
+  - Timer tracking the duration of gameplay.
+  - Validation of the railway loop to ensure all rules are followed.
 
-  - [X] Save: The game's state can be saved during gameplay, and upon reopening the page, the last saved state can be loaded (1 point)
-  - [X] Save: Leaderboards are saved in LocalStorage, and are accessible even after reloading the page (2 points)
-  - [X] Element placement: Drawing the path by holding down the mouse button and moving across the cells (2 points)
+- **End Game:**
+  - Display of completion time upon successfully forming a valid railway loop.
+  - Leaderboard showcasing the fastest players for each difficulty level.
+
+## Technologies Used
+
+- **HTML & CSS:** Structure and styling of the game interface.
+- **JavaScript:** Game logic and interactivity.
+
+## Installation
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/muhammademanaftab/Railways-Puzzle-Game.git
+   ```
+2. **Open the Game:**
+   - Navigate to the project directory.
+   - Open `index.html` in your preferred web browser.
+
+## Usage
+
+1. **Launch the Game:**
+   - Open `index.html` in a web browser.
+
+2. **Main Menu:**
+   - Enter your name.
+   - Select the desired difficulty level.
+   - Click "Start" to begin the game.
+
+3. **Gameplay:**
+   - Place railway elements on the grid by clicking on the cells.
+   - Ensure the railway forms a continuous loop adhering to terrain constraints.
+   - Use available controls to rotate or delete railway pieces as needed.
+
+4. **Completion:**
+   - Once a valid railway loop is formed and all tiles are filled, the game will display your completion time.
+   - Your time will be recorded in the leaderboard if it's among the fastest.
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add feature-name"
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin feature-name
+   ```
+5. Open a pull request.
+
+
+## Contact
+
+For questions or issues, feel free to contact:
+
+- **Name:** Muhammad Aftab
+- **GitHub:** [muhammademanaftab](https://github.com/muhammademanaftab)
+- **Email:** emanaftab2022@gmail.com
+
+---
+
+Thank you for exploring **The Kingdom's Railway Network**! Your feedback is appreciated.
