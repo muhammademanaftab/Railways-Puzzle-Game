@@ -84,7 +84,7 @@ Contributions are welcome! To contribute:
 
 For questions or issues, feel free to contact:
 
-- **Name:** Muhammad Aftab
+- **Name:** Muhammad Eman Aftab
 - **GitHub:** [muhammademanaftab](https://github.com/muhammademanaftab)
 - **Email:** emanaftab2022@gmail.com
 
